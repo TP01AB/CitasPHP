@@ -17,6 +17,10 @@ and open the template in the editor.
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/all.css">
 </head>
+<?php
+include_once '../Modelo/Usuario.php';
+
+?>
 
 <body class="" onload="validacionLogin()">
 
@@ -26,37 +30,45 @@ and open the template in the editor.
             <div class="card-header bg-primary">
                 <h2 class=" font-weight-bold text-white text-center">Registro</h2>
             </div>
+            <?php
+            if (isset($_SESSION['userDatos'])) {
+                $userDatos = $_SESSION['userDatos'];
+                unset($_SESSION['userDatos']);
+            } else {
+                $userDatos = new Usuario(0, "", "", 0, "", 0, 0, 0, 0);
+            }
+            ?>
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="loginForm " action="../Controlador/controlador.php" method="POST" novalidate>
+                <form class=" " name="registroForm " action="../Controlador/controlador.php" method="POST" novalidate>
 
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="emailLogin">E-mail</label>
-                        <input type="email" id="emailLogin" name="emailLogin" class="form-control" required />
+                    <div class=" mb-4">
+                        <label class="form-label" for="email">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control" required value="<?= $userDatos->get_email() ?>" />
                     </div>
 
                     <!-- Email input -->
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="passwordLogin">Password </label>
-                        <input type="password" id="passwordLogin" name="passwordLogin" class="form-control" required />
+                    <div class=" mb-4">
+                        <label class="form-label" for="password">Password </label>
+                        <input type="password" id="password" name="password" class="form-control" required />
                     </div>
 
-                    <div class="form-outline mb-4">
+                    <div class=" mb-4">
                         <label class="form-label" for="nombre">Nombre </label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" required />
+                        <input type="text" id="nombre" name="nombre" class="form-control" value="<?= $userDatos->get_nick() ?>" required />
                     </div>
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="apellidos">Apellidos </label>
-                        <input type="text" id="apellidos" name="apellidos" class="form-control" required />
-                    </div>
-                    <div class="form-outline mb-4">
+                    <div class=" mb-4">
                         <label class="form-label" for="dni">DNI </label>
-                        <input type="text" id="dni" name="dni" class="form-control" required />
+                        <input type="text" id="dni" name="dni" class="form-control" value="<?= $userDatos->get_dni() ?>" required />
                     </div>
-                    <div class="form-outline mb-4">
+                    <div class=" mb-4">
                         <label class="form-label" for="telefono">Telefono </label>
-                        <input type="text" id="dni" name="dni" class="form-control" required />
+                        <input type="number" id="dni" name="dni" class="form-control" value="<?= $userDatos->get_phone() ?>" required />
+                    </div>
+                    <div class=" mb-4">
+                        <label class="form-label" for="edad">Edad </label>
+                        <input type="number" id="edad" name="edad" class="form-control" value="<?= $userDatos->get_age() ?>" required />
                     </div>
                     <?php
                     if (isset($_SESSION['mensaje'])) {
@@ -71,7 +83,7 @@ and open the template in the editor.
                     }
                     ?>
                     <!-- Submit button -->
-                    <button type="submit" name="iniciarBD" id="iniciarBD" class="btn btn-primary btn-block mb-5">Iniciar</button>
+                    <button type="submit" name="registroBD" id="registroBD" class="btn btn-primary btn-block mb-5">Registrarse</button>
                 </form>
             </div>
         </div>

@@ -47,3 +47,38 @@ if (isset($_REQUEST['iniciarBD'])) {
         header('Location: ../Vistas/login.php');
     }
 }
+if (isset($_REQUEST['registroBD'])) {
+    //RECOGIDA DE DATOS.
+    $email = $_REQUEST['email'];
+    $password = $_REQUEST['password'];
+    $nombre = $_REQUEST['nombre'];
+    $edad = $_REQUEST['edad'];
+    $dni = $_REQUEST['dni'];
+    $telefono = $_REQUEST['telefono'];
+    $user=new Usuario(0,$email,$dni,0,$nombre,$edad,$telefono,0,0);
+    if (gestionDatos::isExistDni($dni)) {
+        $mensaje = "El dni introduccido ya esta en uso en la plataforma.";
+        $_SESSION['mensaje'] = $mensaje;
+        $user->set_dni("");
+        $_SESSION['userDatos'] = $user;
+        header('Location: ../Vistas/register.php');
+    }
+    if (gestionDatos::isExistEmail($email)) {
+        $mensaje = "El e-mail introduccido ya esta en uso en la plataforma.";
+        $_SESSION['mensaje'] = $mensaje;
+        $user->set_email("");
+        $_SESSION['userDatos'] = $user;
+        header('Location: ../Vistas/register.php');
+    }
+    if(gestionDatos::insertUser($user,$password)){
+        $mensaje = "Usuario creado correctamente, actualmente su cuenta esta desactivada hasta ser revisada por un administrador";
+        $_SESSION['mensaje'] = $mensaje;
+        header('Location: ../index.php');
+    }else{
+        $mensaje = "fallo al insertar el usuario en la BD";
+        $_SESSION['mensaje'] = $mensaje;
+        $_SESSION['userDatos'] = $user;
+        header('Location: ../Vistas/register.php');
+    }
+
+}
