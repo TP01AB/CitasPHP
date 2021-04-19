@@ -36,7 +36,6 @@ and open the template in the editor.
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                            <p class="text-center mb-2">© Copyright <strong>uiuxStream</strong>. All Rights Reserved</p>
                             <p class="text-center mb-0">Created by <a href="#">Israel Molina Pulpon</a></p>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ and open the template in the editor.
 </head>
 <?php
 include_once '../Modelo/Usuario.php';
-
+session_start();
 ?>
 
 <body class="" onload="validacionLogin()">
@@ -64,20 +64,21 @@ include_once '../Modelo/Usuario.php';
                     </div>
                     <div class=" mb-4">
                         <label class="form-label" for="telefono">Telefono </label>
-                        <input type="number" id="dni" name="dni" class="form-control" value="<?= $userDatos->get_phone() ?>" required />
+                        <input type="number" id="telefono" name="telefono" class="form-control" value="<?= $userDatos->get_phone() ?>" required />
                     </div>
                     <div class=" mb-4">
                         <label class="form-label" for="edad">Edad </label>
                         <input type="number" id="edad" name="edad" class="form-control" value="<?= $userDatos->get_age() ?>" required />
                     </div>
                     <?php
+                    
                     if (isset($_SESSION['mensaje'])) {
                         $mensaje = $_SESSION['mensaje'];
                         unset($_SESSION['mensaje']);
                     ?>
 
                         <p class="note note-danger">
-                            <strong>Error:</strong> <?php echo $mensaje; ?>
+                            <strong>Error:</strong> <?= $mensaje ?>
                         </p>
                     <?php
                     }

@@ -11,6 +11,8 @@
  *
  * @author isra9
  */
+include_once '../Auxiliar/constantes.php';
+include_once '../Modelo/Usuario.php';
 class gestionDatos
 {
 
@@ -40,7 +42,7 @@ class gestionDatos
     static function isExistEmail($email)
     {
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " + constantes::$users + " WHERE email= ?");
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . " WHERE email= ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
@@ -58,7 +60,7 @@ class gestionDatos
     static function isExistDni($dni)
     {
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " + constantes::$users + " WHERE dni= ?");
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . " WHERE dni= ? ");
         $stmt->bind_param("s", $dni);
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
@@ -77,7 +79,7 @@ class gestionDatos
     {
 
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " + constantes::$preferencias + " WHERE email= ?");
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE email= ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
@@ -99,7 +101,7 @@ class gestionDatos
     static function getUser($email, $password)
     {
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$users . ".email= ? AND " . constantes::users . ".password= ? AND " . constantes::$roles . ".Id_user=" . constantes::users . ".id_User ");
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$users . ".email= ? AND " . constantes::$users . ".password= ? AND " . constantes::$roles . ".Id_user=" . constantes::$users . ".id_User ");
         $stmt->bind_param("ss", $email, password_hash($password, PASSWORD_DEFAULT));
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
@@ -184,8 +186,8 @@ class gestionDatos
             $correcto = false;
             echo "Error al actualizar estado online del usuario: " . self::$conexion->error . '<br/>';
         }
-        return $correcto;
         mysqli_close(self::$conexion);
+        return $correcto;
     }
 
     //======================================================================
@@ -196,7 +198,7 @@ class gestionDatos
     //======================================================================
     static function insertUser($user,$password){
         self::conexion();
-        $consulta = "INSERT INTO ".constantes::$users." VALUES (default," . $user->get_dni() . "," . $user->get_email() . "," . $user->get_email() . "," . password_hash($password, PASSWORD_DEFAULT) . "," . $user->get_nick()."," . $user->get_age()."," . $user->get_phone().",0,0)";
+        $consulta = "INSERT INTO ".constantes::$users." VALUES (default ,'" . $user->get_dni() . "','" . $user->get_email() . "','" . password_hash($password, PASSWORD_DEFAULT)."','" . $user->get_nick()."','" . $user->get_age()."','" . $user->get_phone()."',default,default)";
         if (self::$conexion->query($consulta)) {
 
             $correcto = true;
@@ -204,7 +206,8 @@ class gestionDatos
             $correcto = false;
             echo "Error al insertar el nuevo  usuario : " . self::$conexion->error . '<br/>';
         }
-        return $correcto;
         mysqli_close(self::$conexion);
+        return $correcto;
+        
     }
 }

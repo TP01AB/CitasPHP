@@ -38,7 +38,7 @@ if (isset($_REQUEST['iniciarBD'])) {
         if ($firstTime) {
             header('Location: ../Vistas/preferencias.php');
         } else {
-            $usuario = gestionDatos::getPreferencias($usuario);
+            //$usuario = gestionDatos::getPreferencias($usuario);
             $_SESSION['usuarioActual'] = $usuario;
             header('Location: ../Vistas/inicio.php');
         }
@@ -55,30 +55,33 @@ if (isset($_REQUEST['registroBD'])) {
     $edad = $_REQUEST['edad'];
     $dni = $_REQUEST['dni'];
     $telefono = $_REQUEST['telefono'];
-    $user=new Usuario(0,$email,$dni,0,$nombre,$edad,$telefono,0,0);
+    //GUARDAMOS DATOS
+    $user = new Usuario(0, $email, $dni, 0, $nombre, $edad, $telefono, 0, 0);
+    //COMPROBACIONES PREVIAS 
+
     if (gestionDatos::isExistDni($dni)) {
         $mensaje = "El dni introduccido ya esta en uso en la plataforma.";
         $_SESSION['mensaje'] = $mensaje;
         $user->set_dni("");
         $_SESSION['userDatos'] = $user;
         header('Location: ../Vistas/register.php');
-    }
+    } else
     if (gestionDatos::isExistEmail($email)) {
         $mensaje = "El e-mail introduccido ya esta en uso en la plataforma.";
         $_SESSION['mensaje'] = $mensaje;
         $user->set_email("");
         $_SESSION['userDatos'] = $user;
         header('Location: ../Vistas/register.php');
-    }
-    if(gestionDatos::insertUser($user,$password)){
+    } else
+    //INSERTAMOS EL USUARIO
+    if (gestionDatos::insertUser($user, $password)) {
         $mensaje = "Usuario creado correctamente, actualmente su cuenta esta desactivada hasta ser revisada por un administrador";
         $_SESSION['mensaje'] = $mensaje;
         header('Location: ../index.php');
-    }else{
+    } else {
         $mensaje = "fallo al insertar el usuario en la BD";
         $_SESSION['mensaje'] = $mensaje;
         $_SESSION['userDatos'] = $user;
         header('Location: ../Vistas/register.php');
     }
-
 }
