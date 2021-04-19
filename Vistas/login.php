@@ -18,17 +18,19 @@ and open the template in the editor.
     <link rel="stylesheet" href="../css/all.css">
 </head>
 
-<body onload="validacionLogin()">
+<body class="" onload="validacionLogin()">
 
     <?php include '../Sources/navbar.php'; ?>
-    <div class="container">
-        <div class="card col-md-5 mx-auto" style="border: 2px solid antiquewhite">
+    <div class="container min-vh-100 mb-3">
+        <div class="card col-md-5 mx-auto" style="border: 4px solid antiquewhite">
+            <div class="card-header bg-primary">
+                <h2 class=" font-weight-bold text-white text-center">Inicio sesion</h2>
+            </div>
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
                 <form class=" " name="loginForm " action="../Controlador/controlador.php" method="POST" novalidate>
-                    <legend class="form-text text-center">Inicio sesion</legend>
-                    <!-- Name input -->
+
                     <div class="form-outline mb-4">
                         <label class="form-label" for="emailLogin">E-mail</label>
                         <input type="email" id="emailLogin" name="emailLogin" class="form-control" required />
@@ -42,7 +44,6 @@ and open the template in the editor.
 
                     </div>
                     <?php
-                    session_start();
                     if (isset($_SESSION['mensaje'])) {
                         $mensaje = $_SESSION['mensaje'];
                         unset($_SESSION['mensaje']);
@@ -60,10 +61,9 @@ and open the template in the editor.
             </div>
         </div>
     </div>
-    <?php
-
-    ?>
-    <?php include '../Sources/footer.php'; ?>
+    <div class="fixed-bottom">
+        <?php include '../Sources/footer.php'; ?>
+    </div>
     <!-- SCRIPT -->
 
     <!-- jQuery -->

@@ -18,15 +18,37 @@ and open the template in the editor.
     <link rel="stylesheet" href="./css/all.css">
 </head>
 
-<body class=" vh-100" >
-    hola soy el index
-    <form name="login" id="login" class="text-left needs-validation" style="color: #757575;" action="Controlador/controlador.php" method="POST">
+<body class="vh-100 m-5">
+    <?php
+    session_start();
+    ?>
+    <div class="card">
+        <div class="card-header">Inicio Citas</div>
+        <div class="card-body">
+            <form name="login" id="login" class="text-left needs-validation" action="Controlador/controlador.php" method="POST">
 
-        <div class="text-center mb-3 pl-5 pr-5">
-            <button type="submit" name="vistaLogin" class="btn  text-white btn-block btn-rounded my-4  z-depth-1a">Vista Login</button>
+                <div class="text-center mb-3 pl-5 pr-5">
+                    <button type="submit" name="vistaLogin" class="btn  text-dark btn-block btn-rounded my-4  z-depth-1a">Login</button>
+                </div>
+                <div class="text-center mb-3 pl-5 pr-5">
+                    <button type="submit" name="vistaRegistro" class="btn  text-dark btn-block btn-rounded my-4  z-depth-1a">Registro</button>
+                </div>
+                <?php
+
+                if (isset($_SESSION['mensaje'])) {
+                    $mensaje = $_SESSION['mensaje'];
+                    unset($_SESSION['mensaje']);
+                ?>
+
+                    <p class="note note-success ">
+                        <strong>Error:</strong> <?= $mensaje ?>
+                    </p>
+                <?php
+                }
+                ?>
+            </form>
         </div>
-    </form>
-
+    </div>
     <?php
     // put your code here
     ?>
