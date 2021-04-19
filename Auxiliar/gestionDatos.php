@@ -56,7 +56,25 @@ class gestionDatos
             return $existe;
         }
     }
-    //===========================EMAIL EXIST=============================
+    //===========================IS ACTIVE=============================
+    static function isActive($email)
+    {
+        self::conexion();
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . " WHERE email= ? AND active=1");
+        $stmt->bind_param("s", $email);
+        if ($stmt->execute()) {
+            $resultado = $stmt->get_result();
+            if ($fila = $resultado->fetch_assoc()) {
+                $existe = true;
+            } else {
+                echo "No existe ningun usuario con el e-mail proporcionado " . self::$conexion->error . '<br/>';
+                $existe = false;
+            }
+            mysqli_close(self::$conexion);
+            return $existe;
+        }
+    }
+    //===========================DNI EXIST=============================
     static function isExistDni($dni)
     {
         self::conexion();
@@ -77,10 +95,9 @@ class gestionDatos
     //===========================FIRST TIME =============================
     static function isFirstTime($idUser)
     {
-
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE email= ?");
-        $stmt->bind_param("s", $email);
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE id = ?");
+        $stmt->bind_param("s", $idUser);
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
             if ($fila = $resultado->fetch_assoc()) {
@@ -106,9 +123,9 @@ class gestionDatos
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
             if ($row = $resultado->fetch_assoc()) {
-                
+
                 if (password_verify($password, $row['password'])) {
-                    $idUser = $row['idUsuario'];
+                    $idUser = $row['id_user'];
                     $email = $row['email'];
                     $nick = $row['nick'];
                     $age = $row['age'];
@@ -124,6 +141,30 @@ class gestionDatos
             return $user;
         }
     }
+    //===========================USER PREFERENCES===================================
+    static function getPreferencias($user)
+    {
+        self::conexion();
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE " . constantes::$preferencias . ".id= ?  ");
+        $stmt->bind_param("i", $user->get_idUser());
+        if ($stmt->execute()) {
+            $resultado = $stmt->get_result();
+            if ($row = $resultado->fetch_assoc()) {
+
+                $tipo = $row['tipoRelacion'];
+                $sport = $row['Deporte'];
+                $art = $row['Arte'];
+                $pol = $row['Politica'];
+                $child = $row['hijos'];
+                $search = $row['busca'];
+                $photo = $row['foto'];
+                $pref = new Preferencias($tipo, $sport, $art, $pol, $child, $search, $photo);
+                $user->set_prefencias($pref);
+            }
+            mysqli_close(self::$conexion);
+            return $user;
+        }
+    }
     //==========================GET MAX ID==========================
     static function getMaxId($email)
     {
@@ -133,9 +174,9 @@ class gestionDatos
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
             if ($row = $resultado->fetch_assoc()) {
-                    $id = $row['id_user'];
-                }
+                $id = $row['id_user'];
             }
+        }
         mysqli_close(self::$conexion);
         return $id;
     }
@@ -197,7 +238,7 @@ class gestionDatos
     static function setOnline($email)
     {
         self::conexion();
-        $consulta = "UPDATE " . constantes::$users . " SET active=1 WHERE email ='" . $email . "'";
+        $consulta = "UPDATE " . constantes::$users . " SET online=1 WHERE email ='" . $email . "'";
         if (self::$conexion->query($consulta)) {
             $correcto = true;
         } else {
@@ -231,9 +272,8 @@ class gestionDatos
     static function insertRol($id)
     {
         self::conexion();
-        $consulta = "INSERT INTO " . constantes::$roles . " VALUES (2 ,'" . $id. "')";
+        $consulta = "INSERT INTO " . constantes::$roles . " VALUES (2 ,'" . $id . "')";
         if (self::$conexion->query($consulta)) {
-
         } else {
             echo "Error al insertar el nuevo  usuario : " . self::$conexion->error . '<br/>';
         }

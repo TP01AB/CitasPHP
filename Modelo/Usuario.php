@@ -23,6 +23,7 @@ class Usuario {
     private $phone;
     private $isActive;
     private $isOnline;
+    private $preferencias;
 
     //-----------------------CONSTRUCTOR
     function __construct($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline) {
@@ -74,7 +75,11 @@ class Usuario {
         return $this->isOnline;
     }
 
-    //-----------------------GET
+    public function get_preferencias() {
+        return $this->preferencias;
+    }
+
+    //-----------------------SET
     public function set_idUser($idUser): void {
         $this->idUser = $idUser;
     }
@@ -109,6 +114,10 @@ class Usuario {
 
     public function set_isOnline($isOnline): void {
         $this->isOnline = $isOnline;
+    }
+
+    public function set_preferencias($preferencias): void {
+        $this->preferencias = $preferencias;
     }
 
 }
