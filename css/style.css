@@ -1,0 +1,47 @@
+body {
+    min-height: 100%;
+    background-image: radial-gradient(circle at 50% -20.71%, #cfa8ff 0, #9d8bff 25%, #6c6cd8 50%, #3f4ea4 75%, #153375 100%);
+}
+
+.btgit:hover {
+    color: white;
+}
+
+.btn-rounded {
+    border-radius: 10em;
+}
+
+button,
+input[type=submit] {
+    font-family: Rubik;
+}
+
+.c1 {
+    color: #543b54;
+    font-size: 25px;
+}
+
+.altura {
+    height: 74vh;
+}
+
+.altura2 {
+    height: 84vh;
+}
+
+#preguntasCreadas li {
+    margin-top: 10px;
+}
+
+#preguntasCreadas li p:nth-child(1),
+.enunciadoPregunta {
+    background-color: #d5e1df;
+}
+
+.colorNav {
+    background: #543B54;
+}
+
+#navbarTogglerDemo02.show {
+    display: flex;
+}
