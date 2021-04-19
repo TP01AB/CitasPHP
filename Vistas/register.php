@@ -24,7 +24,7 @@ and open the template in the editor.
     <div class="container min-vh-100 mb-3">
         <div class="card col-md-5 mx-auto" style="border: 4px solid antiquewhite">
             <div class="card-header bg-primary">
-                <h2 class=" font-weight-bold text-white text-center">Inicio sesion</h2>
+                <h2 class=" font-weight-bold text-white text-center">Registro</h2>
             </div>
             <!--Card content-->
             <div class="card-body">
@@ -34,14 +34,29 @@ and open the template in the editor.
                     <div class="form-outline mb-4">
                         <label class="form-label" for="emailLogin">E-mail</label>
                         <input type="email" id="emailLogin" name="emailLogin" class="form-control" required />
-
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="passwordLogin">Password </label>
                         <input type="password" id="passwordLogin" name="passwordLogin" class="form-control" required />
+                    </div>
 
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="nombre">Nombre </label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" required />
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="apellidos">Apellidos </label>
+                        <input type="text" id="apellidos" name="apellidos" class="form-control" required />
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="dni">DNI </label>
+                        <input type="text" id="dni" name="dni" class="form-control" required />
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="telefono">Telefono </label>
+                        <input type="text" id="dni" name="dni" class="form-control" required />
                     </div>
                     <?php
                     if (isset($_SESSION['mensaje'])) {

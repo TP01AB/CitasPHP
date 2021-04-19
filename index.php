@@ -18,13 +18,17 @@ and open the template in the editor.
     <link rel="stylesheet" href="./css/all.css">
 </head>
 
-<body class=" vh-100" >
+<body class=" vh-100">
     hola soy el index
     <form name="login" id="login" class="text-left needs-validation" style="color: #757575;" action="Controlador/controlador.php" method="POST">
 
         <div class="text-center mb-3 pl-5 pr-5">
-            <button type="submit" name="vistaLogin" class="btn  text-white btn-block btn-rounded my-4  z-depth-1a">Vista Login</button>
+            <button type="submit" name="vistaLogin" class="btn  text-white btn-block btn-rounded my-4  z-depth-1a">Login</button>
         </div>
+        <div class="text-center mb-3 pl-5 pr-5">
+            <button type="submit" name="vistaRegistro" class="btn  text-white btn-block btn-rounded my-4  z-depth-1a">Registro</button>
+        </div>
+
     </form>
 
     <?php

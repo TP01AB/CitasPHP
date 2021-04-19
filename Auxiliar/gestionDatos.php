@@ -40,7 +40,7 @@ class gestionDatos
     static function isUsuario($email)
     {
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " + constantes::users + " WHERE email= ?");
+        $stmt = self::$conexion->prepare("SELECT * FROM " + constantes::$users + " WHERE email= ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
@@ -54,6 +54,25 @@ class gestionDatos
             return $existe;
         }
     }
+    //===========================USER EXIST=============================
+    static function isFirstTime($idUser){
+
+        self::conexion();
+        $stmt = self::$conexion->prepare("SELECT * FROM " + constantes::$preferencias + " WHERE email= ?");
+        $stmt->bind_param("s", $email);
+        if ($stmt->execute()) {
+            $resultado = $stmt->get_result();
+            if ($fila = $resultado->fetch_assoc()) {
+                $existe = true;
+            } else {
+                echo "Error al encontrar usuario: " . self::$conexion->error . '<br/>';
+                $existe = false;
+            }
+            mysqli_close(self::$conexion);
+            return $existe;
+        }
+
+    }
 
     //======================================================================
     // GET
@@ -62,7 +81,7 @@ class gestionDatos
     static function getUser($email, $password)
     {
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::users . "," . constantes::$roles . " WHERE " . constantes::users . ".email= ? AND " . constantes::users . ".password= ? AND " . constantes::$roles . ".Id_user=" . constantes::users . ".id_User ");
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$users . ".email= ? AND " . constantes::users . ".password= ? AND " . constantes::$roles . ".Id_user=" . constantes::users . ".id_User ");
         $stmt->bind_param("ss", $email, password_hash($password, PASSWORD_DEFAULT));
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
@@ -83,7 +102,6 @@ class gestionDatos
         }
     }
     //==========================GET ALL ONLINE==========================
-
     static function getAllOnline()
     {
         self::conexion();
@@ -98,11 +116,13 @@ class gestionDatos
         }
         return $online;
     }
+    //==========================GET FRIENDS ONLINE==========================
     static function getFriendsOnline($email)
     {
+
         self::conexion();
         $online = 0;
-        $consulta = "SELECT * FROM" . constantes::$users . ",".constantes::$amistad." WHERE ".constantes::$users.".active=1 ";
+        $consulta = "SELECT * FROM" . constantes::$users . "," . constantes::$amistad . " WHERE " . constantes::$users . ".active=1 ";
         if ($resultado = self::$conexion->query($consulta)) {
             if ($fila = $resultado->fetch_assoc()) {
                 while ($row = $resultado->fetch_assoc()) {
