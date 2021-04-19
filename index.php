@@ -41,7 +41,7 @@ and open the template in the editor.
                 ?>
 
                     <p class="note note-success ">
-                        <strong>Error:</strong> <?= $mensaje ?>
+                        <?= $mensaje ?>
                     </p>
                 <?php
                 }

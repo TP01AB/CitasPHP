@@ -29,10 +29,13 @@ if (isset($_REQUEST['iniciarBD'])) {
     //CONSULTA A BD.
     $usuario = gestionDatos::getUser($email, $password);
     if (isset($usuario)) {
-
+        $mensaje = "Credenciales correctas.";
+        $_SESSION['mensaje'] = $mensaje;
+        
         gestionDatos::setOnline($email);
         $usuario->set_isOnline(true);
-        $allOnline = gestionDatos::getAllOnline();
+        header('Location: ../Vistas/login.php');
+        /*$allOnline = gestionDatos::getAllOnline();
         $friendOnline = gestionDatos::getFriendsOnline($usuario->get_idUser());
         $firstTime = gestionDatos::isFirstTime($usuario->get_idUser());
         if ($firstTime) {
@@ -41,9 +44,10 @@ if (isset($_REQUEST['iniciarBD'])) {
             //$usuario = gestionDatos::getPreferencias($usuario);
             $_SESSION['usuarioActual'] = $usuario;
             header('Location: ../Vistas/inicio.php');
-        }
+        }*/
     } else {
-
+        $mensaje = "Credenciales erroneas.";
+        $_SESSION['mensaje'] = $mensaje;
         header('Location: ../Vistas/login.php');
     }
 }
@@ -75,6 +79,8 @@ if (isset($_REQUEST['registroBD'])) {
     } else
     //INSERTAMOS EL USUARIO
     if (gestionDatos::insertUser($user, $password)) {
+        $id=gestionDatos::getMaxId($email);
+        gestionDatos::insertRol($id);
         $mensaje = "Usuario creado correctamente, actualmente su cuenta esta desactivada hasta ser revisada por un administrador";
         $_SESSION['mensaje'] = $mensaje;
         header('Location: ../index.php');

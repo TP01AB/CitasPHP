@@ -19,7 +19,9 @@ and open the template in the editor.
 </head>
 
 <body class="" onload="validacionLogin()">
-
+    <?php
+    session_start();
+    ?>
     <?php include '../Sources/navbar.php'; ?>
     <div class="container min-vh-100 mb-3">
         <div class="card col-md-5 mx-auto" style="border: 4px solid antiquewhite">
@@ -31,14 +33,14 @@ and open the template in the editor.
                 <!-- Form -->
                 <form class=" " name="loginForm " action="../Controlador/controlador.php" method="POST" novalidate>
 
-                    <div class="form-outline mb-4">
+                    <div class=" mb-4">
                         <label class="form-label" for="emailLogin">E-mail</label>
                         <input type="email" id="emailLogin" name="emailLogin" class="form-control" required />
 
                     </div>
 
                     <!-- Email input -->
-                    <div class="form-outline mb-4">
+                    <div class=" mb-4">
                         <label class="form-label" for="passwordLogin">Password </label>
                         <input type="password" id="passwordLogin" name="passwordLogin" class="form-control" required />
 

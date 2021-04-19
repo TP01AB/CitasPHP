@@ -33,7 +33,7 @@ and open the template in the editor.
 <body>
 
     <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark mb-3">
-        <a class="navbar-brand" href="#">Citas</a>
+        <a class="navbar-brand" href="../index.php">Citas</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
