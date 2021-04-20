@@ -20,6 +20,7 @@ class Usuario
     private $dni;
     private $rol;
     private $nick;
+    private $sex;
     private $age;
     private $phone;
     private $isActive;
@@ -27,12 +28,13 @@ class Usuario
     private $preferencias;
 
     //-----------------------CONSTRUCTOR
-    function __construct($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline)
+    function __construct($idUser, $email, $dni, $rol, $nick, $sexo, $age, $phone, $isActive, $isOnline)
     {
         $this->idUser = $idUser;
         $this->email = $email;
         $this->dni = $dni;
         $this->nick = $nick;
+        $this->sex = $sex;
         $this->age = $age;
         $this->phone = $phone;
         $this->rol = $rol;
@@ -51,7 +53,7 @@ class Usuario
         return $this->email;
     }
 
-        public function get_dni()
+    public function get_dni()
     {
         return $this->dni;
     }
@@ -65,7 +67,10 @@ class Usuario
     {
         return $this->nick;
     }
-
+    public function get_sex()
+    {
+        return $this->sex;
+    }
     public function get_age()
     {
         return $this->age;
@@ -101,7 +106,7 @@ class Usuario
     {
         $this->email = $email;
     }
-        public function set_dni($dni): void
+    public function set_dni($dni): void
     {
         $this->dni = $dni;
     }
@@ -115,7 +120,10 @@ class Usuario
     {
         $this->nick = $nick;
     }
-
+    public function set_sex($sex): void
+    {
+        $this->sex = $sex;
+    }
     public function set_age($age): void
     {
         $this->age = $age;

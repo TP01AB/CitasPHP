@@ -10,8 +10,10 @@ include_once '../Modelo/Preferencias.php';
 include_once '../Auxiliar/gestionDatos.php';
 session_start();
 $_SESSION['allOnline'] = gestionDatos::getAllOnline();
-if (isset($_REQUEST['preferenciasBD'])) {
+if (isset($_SESSION['usuarioActual'])) {
     $usuario = $_SESSION['usuarioActual'];
+}
+if (isset($_REQUEST['preferenciasBD'])) {
     $deportes = $_REQUEST['deportes'];
     $artes = $_REQUEST['artes'];
     $politica = $_REQUEST['politica'];

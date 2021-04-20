@@ -120,6 +120,8 @@ class gestionDatos
     static function getUserLogin($email, $password)
     {
         self::conexion();
+        $idUser = 0;
+        $user = null;
         $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$users . ".email= ?  AND " . constantes::$roles . ".id_user = " . constantes::$users . ".id_user ");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
@@ -234,22 +236,23 @@ class gestionDatos
     static function getPreferencias($user)
     {
         self::conexion();
-        $id = $user->get_idUser();
-        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE id = ?  ");
-        $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            $resultado = $stmt->get_result();
-            if ($row = $resultado->fetch_assoc()) {
-
-                $tipo = $row['tipoRelacion'];
-                $sport = $row['Deporte'];
-                $art = $row['Arte'];
-                $pol = $row['Politica'];
-                $child = $row['hijos'];
-                $search = $row['busca'];
-                $photo = $row['foto'];
-                $pref = new Preferencias($tipo, $sport, $art, $pol, $child, $search, $photo);
-                $user->set_preferencias($pref);
+        if (isset($user)) {
+            $id = $user->get_idUser();
+            $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE id = ?  ");
+            $stmt->bind_param("i", $id);
+            if ($stmt->execute()) {
+                $resultado = $stmt->get_result();
+                if ($row = $resultado->fetch_assoc()) {
+                    $tipo = $row['tipoRelacion'];
+                    $sport = $row['Deporte'];
+                    $art = $row['Arte'];
+                    $pol = $row['Politica'];
+                    $child = $row['hijos'];
+                    $search = $row['busca'];
+                    $photo = $row['foto'];
+                    $pref = new Preferencias($tipo, $sport, $art, $pol, $child, $search, $photo);
+                    $user->set_preferencias($pref);
+                }
             }
             mysqli_close(self::$conexion);
             return $user;

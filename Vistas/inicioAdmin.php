@@ -105,6 +105,12 @@ and open the template in the editor.
                                                 <a>Dni</a>
                                             </th>
                                             <th class="th-lg">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
+                                                    <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z" />
+                                                </svg>
+                                                <a>Password</a>
+                                            </th>
+                                            <th class="th-lg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fonts" viewBox="0 0 16 16">
                                                     <path d="M12.258 3h-8.51l-.083 2.46h.479c.26-1.544.758-1.783 2.693-1.845l.424-.013v7.827c0 .663-.144.82-1.3.923v.52h4.082v-.52c-1.162-.103-1.306-.26-1.306-.923V3.602l.431.013c1.934.062 2.434.301 2.693 1.846h.479L12.258 3z" />
                                                 </svg>
@@ -147,6 +153,7 @@ and open the template in the editor.
                                                     } ?>
                                                 </td>
                                                 <td>
+
                                                     <?= $usuario->get_email() ?>
                                                 </td>
                                                 <td><?= $usuario->get_dni() ?></td>
@@ -157,6 +164,10 @@ and open the template in the editor.
                                                     $color = "#5ACA91";
                                                 }
                                                 ?>
+                                                <td>
+                                                    <input type="hidden" name="email[]" value="<?= $usuario->get_email() ?>">
+                                                    <input class="form-control" type="password" name="password[]" style="border-color: <?= $color ?>" />
+                                                </td>
                                                 <td>
                                                     <input class="form-control" type="text" name="nombre[]" value="<?= $usuario->get_nick() ?>" style="border-color: <?= $color ?>" />
                                                 </td>

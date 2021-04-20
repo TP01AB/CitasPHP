@@ -100,10 +100,16 @@ if (isset($_REQUEST['editarUsuario'])) {
 
         $nombres = $_REQUEST['nombre'];
         $tfnos = $_REQUEST['tfno'];
+        $emails = $_REQUEST['email'];
 
         $usu->set_nick($nombres[$pos]);
         $usu->set_phone($tfnos[$pos]);
-
+        $passwords = $_REQUEST['password'];
+        $password = $passwords[$pos];
+        $email = $emails[$pos];
+        if ($password != null) {
+            gestionDatos::setPassword($email, $password);
+        }
         if (!gestionDatos::updateUsuario($usu)) {
             $mensaje = 'No se ha podido actualizar el usuario';
             $_SESSION['mensaje'] = $mensaje;

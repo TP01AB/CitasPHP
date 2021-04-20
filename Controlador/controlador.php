@@ -44,12 +44,14 @@ if (isset($_REQUEST['iniciarBD'])) {
                 gestionDatos::setOnline($email);
                 $usuario->set_isOnline(1);
                 $firstTime = gestionDatos::isFirstTime($usuario->get_idUser());
+                $_SESSION['usuarioActual'] = $usuario;
+                $_SESSION['rolActual'] = $usuario->get_rol();
                 if (!$firstTime) {
+
                     header('Location: ../Vistas/preferencias.php');
                 } else {
-                    $_SESSION['usuarioActual'] = $usuario;
                     $_SESSION['Preferencias'] = $usuario->get_preferencias();
-                    $_SESSION['rolActual'] = $usuario->get_rol();
+
                     $amigos = array();
                     $amigos = gestionDatos::getAmigos($usuario->get_idUser());
                     $pendientes = array();
@@ -98,9 +100,10 @@ if (isset($_REQUEST['registroBD'])) {
         $nombre = $_REQUEST['nombre'];
         $edad = $_REQUEST['edad'];
         $dni = $_REQUEST['dni'];
+        $sexo = $_REQUEST['sexo'];
         $telefono = $_REQUEST['telefono'];
         //GUARDAMOS DATOS
-        $user = new Usuario(0, $email, $dni, 0, $nombre, $edad, $telefono, 0, 0);
+        $user = new Usuario(0, $email, $dni, 0, $nombre,$sexo, $edad, $telefono, 0, 0);
         //COMPROBACIONES PREVIAS 
 
         if (gestionDatos::isExistDni($dni)) {
