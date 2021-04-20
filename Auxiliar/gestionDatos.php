@@ -13,6 +13,7 @@
  */
 include_once '../Auxiliar/constantes.php';
 include_once '../Modelo/Usuario.php';
+include_once '../Modelo/Preferencias.php';
 class gestionDatos
 {
 
@@ -103,9 +104,10 @@ class gestionDatos
             if ($fila = $resultado->fetch_assoc()) {
                 $existe = true;
             } else {
-                echo "Error al encontrar usuario: " . self::$conexion->error . '<br/>';
+                echo "No se encuentran preferencias del  usuario:  '<br/>'";
                 $existe = false;
             }
+
             mysqli_close(self::$conexion);
             return $existe;
         }
@@ -136,6 +138,7 @@ class gestionDatos
                     $rol = $row['id_rol'];
                     $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
                 }
+                var_dump($user);
             }
             mysqli_close(self::$conexion);
             return $user;
@@ -145,8 +148,9 @@ class gestionDatos
     static function getPreferencias($user)
     {
         self::conexion();
-        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE " . constantes::$preferencias . ".id= ?  ");
-        $stmt->bind_param("i", $user->get_idUser());
+        $id= $user->get_idUser();
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE id = ?  ");
+        $stmt->bind_param("i", $id);
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
             if ($row = $resultado->fetch_assoc()) {
@@ -159,7 +163,7 @@ class gestionDatos
                 $search = $row['busca'];
                 $photo = $row['foto'];
                 $pref = new Preferencias($tipo, $sport, $art, $pol, $child, $search, $photo);
-                $user->set_prefencias($pref);
+                $user->set_preferencias($pref);
             }
             mysqli_close(self::$conexion);
             return $user;
@@ -249,12 +253,27 @@ class gestionDatos
         return $correcto;
     }
 
+    //==============================PREFERENCIAS=======================
+    static function updatePreferencias($preferencias, $id)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$preferencias . " SET tipoRelacion=" . $preferencias->get_tipoRelacion() . ",Deporte=" . $preferencias->get_deporte() . ",Arte=" . $preferencias->get_arte() . ",Politica=" . $preferencias->get_politica() . ",hijos=" . $preferencias->get_hijos() . ",busca=" . $preferencias->get_busca() . ", foto=" . $preferencias->get_foto() . " WHERE id =" . $id . "";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar estado online del usuario: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
     //======================================================================
     // DELETE
     //======================================================================
     //======================================================================
     // INSERT
     //======================================================================
+    //==============================NEW USER=======================
     static function insertUser($user, $password)
     {
         self::conexion();
@@ -269,6 +288,7 @@ class gestionDatos
         mysqli_close(self::$conexion);
         return $correcto;
     }
+    //==============================NEW ROL=======================
     static function insertRol($id)
     {
         self::conexion();
@@ -276,6 +296,17 @@ class gestionDatos
         if (self::$conexion->query($consulta)) {
         } else {
             echo "Error al insertar el nuevo  usuario : " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+    }
+    //==============================NEW PREF=======================
+    static function insertPreferencias($preferencias, $id)
+    {
+        self::conexion();
+        $consulta = "INSERT INTO " . constantes::$preferencias . " VALUES (" . $id . " ," . $preferencias->get_tipoRelacion() . "," . $preferencias->get_deporte() . "," . $preferencias->get_arte() . "," . $preferencias->get_politica() . "," . $preferencias->get_hijos() . "," . $preferencias->get_busca() . "," . $preferencias->get_foto() . ")";
+        if (self::$conexion->query($consulta)) {
+        } else {
+            echo "Error al insertar preferencias del   usuario : " . self::$conexion->error . '<br/>';
         }
         mysqli_close(self::$conexion);
     }

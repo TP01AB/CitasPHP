@@ -20,53 +20,111 @@ and open the template in the editor.
 
 <body class="" onload="validacionLogin()">
     <?php
+    include_once '../Modelo/Preferencias.php';
+    include_once '../Auxiliar/gestionDatos.php';
     session_start();
     ?>
     <?php include '../Sources/navbar.php'; ?>
     <div class="container min-vh-100 mb-3">
         <div class="card col-md-5 mx-auto" style="border: 4px solid antiquewhite">
             <div class="card-header bg-primary">
-                <h2 class=" font-weight-bold text-white text-center">Registro</h2>
+                <h2 class=" font-weight-bold text-white text-center">Preferencias</h2>
             </div>
             <?php
-            if (isset($_SESSION['userDatos'])) {
-                $userDatos = $_SESSION['userDatos'];
-                unset($_SESSION['userDatos']);
+            if (isset($_SESSION['Preferencias'])) {
+                $preferencias = $_SESSION['Preferencias'];
             } else {
-                $userDatos = new Usuario(0, "", "", 0, "", 0, 0, 0, 0);
+                $preferencias = new Preferencias(0, 50, 50, 50, 0, 0, 0);
             }
             ?>
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="registroForm " action="../Controlador/controlador.php" method="POST" novalidate>
+                <form class="mb-1 " name="registroForm " action="../Controlador/controladorUsuario.php" method="POST" >
 
                     <div class=" mb-4">
-                        <label class="form-label" for="email">E-mail</label>
-                        <input type="email" id="email" name="email" class="form-control" required value="<?= $userDatos->get_email() ?>" />
-                    </div>
+                        <label for="deportes" class="form-label">Deportes</label>
+                        <input type="range" list="sports" class="form-control-range" min="0" max="100" step="1" name="deportes" id="deportes" value="<?= $preferencias->get_deporte() ?>">
 
-                    <!-- Email input -->
-                    <div class=" mb-4">
-                        <label class="form-label" for="password">Password </label>
-                        <input type="password" id="password" name="password" class="form-control" required />
+                        <datalist id="sports">
+                            <option value="0" label="0">
+                            <option value="25" label="25">
+                            <option value="50" label="50">
+                            <option value="75" label="75">
+                            <option value="100" label="100">
+                        </datalist>
                     </div>
+                    <div class=" mb-4">
+                        <label for="artes" class="form-label">Artes</label>
+                        <input type="range" list="art" class="form-control-range" min="0" max="100" step="1" name="artes" id="artes" value="<?= $preferencias->get_arte() ?>">
+                        <datalist id="art">
+                            <option value="0" label="0">
+                            <option value="25" label="25">
+                            <option value="50" label="50">
+                            <option value="75" label="75">
+                            <option value="100" label="100">
+                        </datalist>
+                    </div>
+                    <div class=" mb-4">
+                        <label for="politica" class="form-label">Politica</label>
+                        <input type="range" list="poli" class="form-control-range" min="0" max="100" step="1" name="politica" id="politica" value="<?= $preferencias->get_politica() ?>">
+                        <datalist id="poli">
+                            <option value="0" label="0">
+                            <option value="25" label="25">
+                            <option value="50" label="50">
+                            <option value="75" label="75">
+                            <option value="100" label="100">
+                        </datalist>
+                    </div>
+                    <hr>
+                    <h5 class="">Tipo de relacion:</h5>
+                    <div name="tipoR" class="btn-group p-0 m-0">
+                        <input type="radio" class="btn-check" name="tipoR" id="tipoR1" value="0" <?php
+                                                                                                    if ($preferencias->get_tipoRelacion() == 0) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary m-0" for="tipoR1">Compromiso</label>
 
-                    <div class=" mb-4">
-                        <label class="form-label" for="nombre">Nombre </label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" value="<?= $userDatos->get_nick() ?>" required />
+                        <input type="radio" class="btn-check" name="tipoR" id="tipoR2" value="1" <?php
+                                                                                                    if ($preferencias->get_tipoRelacion() == 1) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary  m-0" for="tipoR2">Exporadica</label>
+
                     </div>
-                    <div class=" mb-4">
-                        <label class="form-label" for="dni">DNI </label>
-                        <input type="text" id="dni" name="dni" class="form-control" value="<?= $userDatos->get_dni() ?>" required />
+                    <h5 class="mt-3">Hijos:</h5>
+                    <div name="hijos" class="btn-group">
+                        <input type="radio" class="btn-check" name="hijos" id="hijos1" value="0" <?php
+                                                                                                    if ($preferencias->get_hijos() == 0) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary  m-0" for="hijos1">Si</label>
+
+                        <input type="radio" class="btn-check" name="hijos" id="hijos2" value="1" <?php
+                                                                                                    if ($preferencias->get_hijos() == 1) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary  m-0" for="hijos2">No</label>
                     </div>
-                    <div class=" mb-4">
-                        <label class="form-label" for="telefono">Telefono </label>
-                        <input type="number" id="telefono" name="telefono" class="form-control" value="<?= $userDatos->get_phone() ?>" required />
-                    </div>
-                    <div class=" mb-4">
-                        <label class="form-label" for="edad">Edad </label>
-                        <input type="number" id="edad" name="edad" class="form-control" value="<?= $userDatos->get_age() ?>" required />
+                    <h5 class="mt-3 ">Busco:</h5>
+                    <div name="busco" class="btn-group mb-3">
+                        <input type="radio" class="btn-check" name="busco" id="busco1" value="0" <?php
+                                                                                                    if ($preferencias->get_busca() == 0) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary  m-0" for="busco1">Mujeres</label>
+
+                        <input type="radio" class="btn-check" name="busco" id="busco2" value="1" <?php
+                                                                                                    if ($preferencias->get_busca() == 1) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary  m-0" for="busco2">Hombres</label>
+                        <input type="radio" class="btn-check" name="busco" id="busco3" value="1" <?php
+                                                                                                    if ($preferencias->get_busca() == 2) {
+                                                                                                        echo 'checked';
+                                                                                                    } ?> />
+                        <label class="btn btn-secondary  m-0" for="busco3">Ambos</label>
+
                     </div>
                     <?php
 
@@ -75,14 +133,14 @@ and open the template in the editor.
                         unset($_SESSION['mensaje']);
                     ?>
 
-                        <p class="note note-danger">
-                            <strong>Error:</strong> <?= $mensaje ?>
+                        <p class="note note-success">
+                            <?= $mensaje ?>
                         </p>
                     <?php
                     }
                     ?>
                     <!-- Submit button -->
-                    <button type="submit" name="registroBD" id="registroBD" class="btn btn-primary btn-block mb-5">Registrarse</button>
+                    <button type="submit" name="preferenciasBD" id="preferenciasBD" class="btn btn-primary btn-block mb-2">Guardar</button>
                 </form>
             </div>
         </div>
