@@ -8,10 +8,7 @@
 include_once '../Modelo/Usuario.php';
 include_once '../Auxiliar/gestionDatos.php';
 session_start();
-
-if (isset($_SESSION['usuarioActual'])) {
-    $usuario = $_SESSION['usuarioActual'];
-}
+$_SESSION['allOnline'] = gestionDatos::getAllOnline();
 //-----------------VISTAS
 if (isset($_REQUEST['vistaLogin'])) {
     unset($_SESSION['usuarioActual']);
@@ -27,6 +24,7 @@ if (isset($_REQUEST['vistaOlvidada'])) {
 }
 
 //------------------Funciones
+
 if (isset($_REQUEST['iniciarBD'])) {
     $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
     $recaptcha_secret = '6LdU7-QZAAAAAChZ7pnDbgTL--nSmYG6aJxTMj2f';
@@ -43,21 +41,22 @@ if (isset($_REQUEST['iniciarBD'])) {
         if (isset($usuario)) {
             if (gestionDatos::isActive($email)) {
                 gestionDatos::setOnline($email);
-                $usuario->set_isOnline(true);
+                $usuario->set_isOnline(1);
                 $firstTime = gestionDatos::isFirstTime($usuario->get_idUser());
                 if (!$firstTime) {
                     header('Location: ../Vistas/preferencias.php');
                 } else {
-                    $usuario = gestionDatos::getPreferencias($usuario);
-                    $_SESSION['usuarioActual'] = $usuario;
-                    $_SESSION['Preferencias'] = $usuario->get_preferencias();
-                    if ($usuario->get_rol() == 2) {
+                    $user = gestionDatos::getPreferencias($usuario);
+                    $_SESSION['usuarioActual'] = $user;
+                    $_SESSION['Preferencias'] = $user->get_preferencias();
+                    $_SESSION['rolActual'] = $user->get_rol();
+                    if ($user->get_rol() == 2) {
                         header('Location: ../Vistas/inicio.php');
-                    } else if ($usuario->get_rol() == 1) {
-                        header('Location: ../Vistas/seleccionAdmin.php');
+                    } else if ($user->get_rol() == 1) {
+                        header('Location: ../Vistas/inicioAdmin.php');
                     }
                 }
-                /*$allOnline = gestionDatos::getAllOnline();
+                /*
         $friendOnline = gestionDatos::getFriendsOnline($usuario->get_idUser());
        */
             } else {
@@ -126,4 +125,12 @@ if (isset($_REQUEST['registroBD'])) {
         $_SESSION['mensaje'] = $mensaje;
         header('Location: ../Vistas/register.php');
     }
+}
+if (isset($_REQUEST['close'])) {
+    unset($_SESSION['usuarioActual']);
+    unset($_SESSION['Preferencias']);
+    unset($_SESSION['rolActual']);
+    $mensaje = 'Sesion cerrada .';
+    $_SESSION['mensaje'] = $mensaje;
+    header('Location: ../index.php');
 }

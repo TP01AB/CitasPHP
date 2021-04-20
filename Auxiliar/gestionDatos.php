@@ -189,14 +189,13 @@ class gestionDatos
     {
         self::conexion();
         $online = 0;
-        $consulta = "SELECT * FROM" . constantes::$users . "WHERE active=1";
+        $consulta = "SELECT * FROM " . constantes::$users . " WHERE online=1";
         if ($resultado = self::$conexion->query($consulta)) {
-            if ($fila = $resultado->fetch_assoc()) {
-                while ($row = $resultado->fetch_assoc()) {
+            while ($fila = $resultado->fetch_assoc()) {
                     $online++;
-                }
             }
         }
+        mysqli_close(self::$conexion);
         return $online;
     }
     //==========================GET FRIENDS ONLINE==========================

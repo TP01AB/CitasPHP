@@ -18,7 +18,7 @@ and open the template in the editor.
     <link rel="stylesheet" href="../css/all.css">
 </head>
 
-<body class="" onload="validacionLogin()">
+<body class="" >
     <?php
     session_start();
     ?>

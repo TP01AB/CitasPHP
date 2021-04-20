@@ -98,6 +98,7 @@ session_start();
                     ?>
                     <!-- Submit button -->
                     <button type="submit" name="registroBD" id="registroBD" class="btn btn-primary btn-block mb-5">Registrarse</button>
+                    <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 </form>
             </div>
         </div>
