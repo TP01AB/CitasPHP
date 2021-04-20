@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 include_once '../Modelo/Usuario.php';
+include_once '../Modelo/Preferencias.php';
 include_once '../Auxiliar/gestionDatos.php';
 session_start();
 $_SESSION['allOnline'] = gestionDatos::getAllOnline();
@@ -53,6 +54,9 @@ if (isset($_REQUEST['iniciarBD'])) {
                     if ($user->get_rol() == 2) {
                         header('Location: ../Vistas/inicio.php');
                     } else if ($user->get_rol() == 1) {
+                        $usuarios= Array();
+                        $usuarios=gestionDatos::getUsers();
+                        $_SESSION['usuarios'] = serialize( $usuarios);
                         header('Location: ../Vistas/inicioAdmin.php');
                     }
                 }
@@ -127,9 +131,11 @@ if (isset($_REQUEST['registroBD'])) {
     }
 }
 if (isset($_REQUEST['close'])) {
+    $usuario= $_SESSION['usuarioActual'];
     unset($_SESSION['usuarioActual']);
     unset($_SESSION['Preferencias']);
     unset($_SESSION['rolActual']);
+    gestionDatos::setOffline($usuario->get_email());
     $mensaje = 'Sesion cerrada .';
     $_SESSION['mensaje'] = $mensaje;
     header('Location: ../index.php');

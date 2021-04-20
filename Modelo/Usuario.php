@@ -11,7 +11,8 @@
  *
  * @author isra9
  */
-class Usuario {
+class Usuario
+{
 
     //-----------------------ATRIBUTOS
     private $idUser;
@@ -26,7 +27,8 @@ class Usuario {
     private $preferencias;
 
     //-----------------------CONSTRUCTOR
-    function __construct($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline) {
+    function __construct($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline)
+    {
         $this->idUser = $idUser;
         $this->email = $email;
         $this->dni = $dni;
@@ -39,85 +41,103 @@ class Usuario {
     }
 
     //-----------------------GET
-    public function get_idUser() {
+    public function get_idUser()
+    {
         return $this->idUser;
     }
 
-    public function get_email() {
+    public function get_email()
+    {
         return $this->email;
     }
 
-    public function get_dni() {
+        public function get_dni()
+    {
         return $this->dni;
     }
 
-    public function get_rol() {
+    public function get_rol()
+    {
         return $this->rol;
     }
 
-    public function get_nick() {
+    public function get_nick()
+    {
         return $this->nick;
     }
 
-    public function get_age() {
+    public function get_age()
+    {
         return $this->age;
     }
 
-    public function get_phone() {
+    public function get_phone()
+    {
         return $this->phone;
     }
 
-    public function get_isActive() {
+    public function get_isActive()
+    {
         return $this->isActive;
     }
 
-    public function get_isOnline() {
+    public function get_isOnline()
+    {
         return $this->isOnline;
     }
 
-    public function get_preferencias() {
+    public function get_preferencias()
+    {
         return $this->preferencias;
     }
 
     //-----------------------SET
-    public function set_idUser($idUser): void {
+    public function set_idUser($idUser): void
+    {
         $this->idUser = $idUser;
     }
 
-    public function set_email($email): void {
+    public function set_email($email): void
+    {
         $this->email = $email;
     }
-
-    public function set_dni($dni): void {
+        public function set_dni($dni): void
+    {
         $this->dni = $dni;
     }
 
-    public function set_rol($rol): void {
+    public function set_rol($rol): void
+    {
         $this->rol = $rol;
     }
 
-    public function set_nick($nick): void {
+    public function set_nick($nick): void
+    {
         $this->nick = $nick;
     }
 
-    public function set_age($age): void {
+    public function set_age($age): void
+    {
         $this->age = $age;
     }
 
-    public function set_phone($phone): void {
+    public function set_phone($phone): void
+    {
         $this->phone = $phone;
     }
 
-    public function set_isActive($isActive): void {
+    public function set_isActive($isActive): void
+    {
         $this->isActive = $isActive;
     }
 
-    public function set_isOnline($isOnline): void {
+    public function set_isOnline($isOnline): void
+    {
         $this->isOnline = $isOnline;
     }
 
-    public function set_preferencias($preferencias): void {
+    public function set_preferencias($preferencias): void
+    {
         $this->preferencias = $preferencias;
     }
-
 }

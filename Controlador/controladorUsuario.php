@@ -33,9 +33,11 @@ if (isset($_REQUEST['preferenciasBD'])) {
 
 }
 if (isset($_REQUEST['close'])) {
+    $usuario = $_SESSION['usuarioActual'];
     unset($_SESSION['usuarioActual']);
     unset($_SESSION['Preferencias']);
     unset($_SESSION['rolActual']);
+    gestionDatos::setOffline($usuario->get_email());
     $mensaje = 'Sesion cerrada .';
     $_SESSION['mensaje'] = $mensaje;
     header('Location: ../index.php');
