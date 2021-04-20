@@ -138,11 +138,35 @@ class gestionDatos
                     $rol = $row['id_rol'];
                     $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
                 }
-                var_dump($user);
             }
             mysqli_close(self::$conexion);
             return $user;
         }
+    }
+
+    //===========================ALL USER===================================
+    static function getUsers()
+    {
+        self::conexion();
+        $users = array();
+        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$roles . ".id_user = " . constantes::$users . ".id_user ";
+        if ($resultado = self::$conexion->query($consulta)) {
+            while ($row = $resultado->fetch_assoc()) {
+                $idUser = $row['id_user'];
+                $email = $row['email'];
+                $nick = $row['nick'];
+                $age = $row['age'];
+                $dni = $row['dni'];
+                $phone = $row['phone'];
+                $isActive = $row['active'];
+                $isOnline = $row['online'];
+                $rol = $row['id_rol'];
+                $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
+                $users[] = $user;
+            }
+        }
+        mysqli_close(self::$conexion);
+        return $users;
     }
     //===========================USER PREFERENCES===================================
     static function getPreferencias($user)
@@ -189,14 +213,13 @@ class gestionDatos
     {
         self::conexion();
         $online = 0;
-        $consulta = "SELECT * FROM" . constantes::$users . "WHERE active=1";
+        $consulta = "SELECT * FROM " . constantes::$users . " WHERE online=1";
         if ($resultado = self::$conexion->query($consulta)) {
-            if ($fila = $resultado->fetch_assoc()) {
-                while ($row = $resultado->fetch_assoc()) {
-                    $online++;
-                }
+            while ($fila = $resultado->fetch_assoc()) {
+                $online++;
             }
         }
+        mysqli_close(self::$conexion);
         return $online;
     }
     //==========================GET FRIENDS ONLINE==========================
@@ -207,10 +230,8 @@ class gestionDatos
         $online = 0;
         $consulta = "SELECT * FROM" . constantes::$users . "," . constantes::$amistad . " WHERE " . constantes::$users . ".active=1 ";
         if ($resultado = self::$conexion->query($consulta)) {
-            if ($fila = $resultado->fetch_assoc()) {
-                while ($row = $resultado->fetch_assoc()) {
-                    $online++;
-                }
+            while ($row = $resultado->fetch_assoc()) {
+                $online++;
             }
         }
         return $online;
@@ -252,7 +273,20 @@ class gestionDatos
         mysqli_close(self::$conexion);
         return $correcto;
     }
-
+    //==============================STATUS OFFLINE=======================
+    static function setOffline($email)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$users . " SET online=0 WHERE email ='" . $email . "'";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar estado online del usuario: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
     //==============================PREFERENCIAS=======================
     static function updatePreferencias($preferencias, $id)
     {
@@ -281,9 +315,96 @@ class gestionDatos
         mysqli_close(self::$conexion);
         return $correcto;
     }
+    
+    //==============================UPDATE USER=======================
+    static function updateUsuario($usuario)
+    {
+        self::conexion();
+        $consulta = "UPDATE ".constantes::$users." SET nick='" . $usuario->get_nick() . "', phone = '" . $usuario->get_phone() . "' WHERE email ='" . $usuario->get_email() . "'";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+        
+    }
+    //==============================ACTIVATE USER=======================
+    static function updateActivo($email)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$users . " SET active=1  WHERE email ='" . $email. "'";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
+    //==============================INACTIVE USER=======================
+    static function updateDesactivo($email)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$users . " SET active=0  WHERE email ='" . $email. "'";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
+    //==============================UPDATE ROL ADMIN=======================
+    static function updateRolAdmin($id)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$roles . " SET id_rol= 1  WHERE id_user =" . $id . "";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
+    //==============================UPDATE ROL USUARIO=======================
+    static function updateRolUser($id)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$roles . " SET id_rol= 2  WHERE id_user =" . $id . "";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
     //======================================================================
     // DELETE
     //======================================================================
+
+    //==============================DELETE USER=======================
+    static function deleteUsuario($email)
+    {
+        self::conexion();
+        $consulta = "DELETE FROM " . constantes::$users . " WHERE email ='" . $email . "'";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al borrar usuario: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
     //======================================================================
     // INSERT
     //======================================================================
@@ -307,6 +428,17 @@ class gestionDatos
     {
         self::conexion();
         $consulta = "INSERT INTO " . constantes::$roles . " VALUES (2 ,'" . $id . "')";
+        if (self::$conexion->query($consulta)) {
+        } else {
+            echo "Error al insertar el nuevo  usuario : " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+    }
+    //==============================NEW ROL ADMIN=======================
+    static function insertRolAdmin($id)
+    {
+        self::conexion();
+        $consulta = "INSERT INTO " . constantes::$roles . " VALUES (1 ,'" . $id . "')";
         if (self::$conexion->query($consulta)) {
         } else {
             echo "Error al insertar el nuevo  usuario : " . self::$conexion->error . '<br/>';

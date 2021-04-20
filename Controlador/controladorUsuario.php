@@ -9,7 +9,7 @@ include_once '../Modelo/Usuario.php';
 include_once '../Modelo/Preferencias.php';
 include_once '../Auxiliar/gestionDatos.php';
 session_start();
-
+$_SESSION['allOnline'] = gestionDatos::getAllOnline();
 if (isset($_REQUEST['preferenciasBD'])) {
     $usuario = $_SESSION['usuarioActual'];
     $deportes = $_REQUEST['deportes'];
@@ -30,4 +30,15 @@ if (isset($_REQUEST['preferenciasBD'])) {
     $mensaje = "Preferencias modificadas";
     $_SESSION['mensaje'] = $mensaje;
     header('Location: ../Vistas/preferencias.php');
+
+}
+if (isset($_REQUEST['close'])) {
+    $usuario = $_SESSION['usuarioActual'];
+    unset($_SESSION['usuarioActual']);
+    unset($_SESSION['Preferencias']);
+    unset($_SESSION['rolActual']);
+    gestionDatos::setOffline($usuario->get_email());
+    $mensaje = 'Sesion cerrada .';
+    $_SESSION['mensaje'] = $mensaje;
+    header('Location: ../index.php');
 }

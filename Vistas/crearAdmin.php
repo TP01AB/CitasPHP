@@ -54,7 +54,7 @@ session_start();
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="registroForm " action="../Controlador/controlador.php" method="POST" novalidate>
+                <form class=" " name="registroForm " action="../Controlador/controladorAdmin.php" method="POST" novalidate>
 
                     <div class=" mb-4">
                         <label class="form-label" for="email">E-mail</label>
