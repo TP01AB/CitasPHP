@@ -30,8 +30,16 @@ if (isset($_REQUEST['preferenciasBD'])) {
     $mensaje = "Preferencias modificadas";
     $_SESSION['mensaje'] = $mensaje;
     header('Location: ../Vistas/preferencias.php');
-
 }
+if (isset($_REQUEST['hacerAmigo'])) {
+    header('Location: ../Vistas/inicio.php');
+}
+if (isset($_REQUEST['enviarMensaje'])) {
+    $email = $_REQUEST['email'];
+    $_SESSION['emailAmigo'] = $email;
+    header('Location: ../Vistas/mensaje.php');
+}
+
 if (isset($_REQUEST['close'])) {
     $usuario = $_SESSION['usuarioActual'];
     unset($_SESSION['usuarioActual']);

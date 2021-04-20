@@ -116,8 +116,8 @@ class gestionDatos
     //======================================================================
     // GET
     //======================================================================
-    //===========================USER===================================
-    static function getUser($email, $password)
+    //===========================USER LOGIN===================================
+    static function getUserLogin($email, $password)
     {
         self::conexion();
         $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$users . ".email= ?  AND " . constantes::$roles . ".id_user = " . constantes::$users . ".id_user ");
@@ -138,6 +138,36 @@ class gestionDatos
                     $rol = $row['id_rol'];
                     $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
                 }
+            }
+            if (!gestionDatos::isFirstTime($idUser)) {
+                $user = gestionDatos::getPreferencias($user);
+            }
+            return $user;
+        }
+    }
+    //===========================GET USER===================================
+    static function getUser($idUser)
+    {
+        self::conexion();
+        $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$users . ".id_user= ?  AND " . constantes::$roles . ".id_user = " . constantes::$users . ".id_user ");
+        $stmt->bind_param("i", $idUser);
+        if ($stmt->execute()) {
+            $resultado = $stmt->get_result();
+            if ($row = $resultado->fetch_assoc()) {
+
+                $idUser = $row['id_user'];
+                $email = $row['email'];
+                $nick = $row['nick'];
+                $age = $row['age'];
+                $dni = $row['dni'];
+                $phone = $row['phone'];
+                $isActive = $row['active'];
+                $isOnline = $row['online'];
+                $rol = $row['id_rol'];
+                $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
+            }
+            if (!gestionDatos::isFirstTime($idUser)) {
+                $user = gestionDatos::getPreferencias($user);
             }
             mysqli_close(self::$conexion);
             return $user;
@@ -162,6 +192,38 @@ class gestionDatos
                 $isOnline = $row['online'];
                 $rol = $row['id_rol'];
                 $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
+                $users[] = $user;
+            }
+        }
+        mysqli_close(self::$conexion);
+        return $users;
+    }
+    //===========================GET FRIENDS ===================================
+    static function getAmigos($idUser)
+    {
+        self::conexion();
+        $users = array();
+        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$amigos . " WHERE " . constantes::$users . ".id_user=" . $idUser . " AND " . constantes::$amigos . ".respuestaR =1 AND (" . constantes::$amigos . ".idUserE =" . $idUser . " OR " . constantes::$amigos . ".idUserR =" . $idUser . " ) ";
+        if ($resultado = self::$conexion->query($consulta)) {
+            while ($row = $resultado->fetch_assoc()) {
+                $idUser = $row['id_user'];
+                $user = gestionDatos::getUser($idUser);
+                $users[] = $user;
+            }
+        }
+        mysqli_close(self::$conexion);
+        return $users;
+    }
+    //===========================GET FRIENDS ===================================
+    static function getPendientes($idUser)
+    {
+        self::conexion();
+        $users = array();
+        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$amigos . " WHERE " . constantes::$users . ".id_user=" . $idUser . " AND " . constantes::$amigos . ".respuestaR =0 AND (" . constantes::$amigos . ".idUserE =" . $idUser . " OR " . constantes::$amigos . ".idUserR =" . $idUser . " ) ";
+        if ($resultado = self::$conexion->query($consulta)) {
+            while ($row = $resultado->fetch_assoc()) {
+                $idUser = $row['id_user'];
+                $user = gestionDatos::getUser($idUser);
                 $users[] = $user;
             }
         }
@@ -315,12 +377,12 @@ class gestionDatos
         mysqli_close(self::$conexion);
         return $correcto;
     }
-    
+
     //==============================UPDATE USER=======================
     static function updateUsuario($usuario)
     {
         self::conexion();
-        $consulta = "UPDATE ".constantes::$users." SET nick='" . $usuario->get_nick() . "', phone = '" . $usuario->get_phone() . "' WHERE email ='" . $usuario->get_email() . "'";
+        $consulta = "UPDATE " . constantes::$users . " SET nick='" . $usuario->get_nick() . "', phone = '" . $usuario->get_phone() . "' WHERE email ='" . $usuario->get_email() . "'";
         if (self::$conexion->query($consulta)) {
             $correcto = true;
         } else {
@@ -329,13 +391,12 @@ class gestionDatos
         }
         mysqli_close(self::$conexion);
         return $correcto;
-        
     }
     //==============================ACTIVATE USER=======================
     static function updateActivo($email)
     {
         self::conexion();
-        $consulta = "UPDATE " . constantes::$users . " SET active=1  WHERE email ='" . $email. "'";
+        $consulta = "UPDATE " . constantes::$users . " SET active=1  WHERE email ='" . $email . "'";
         if (self::$conexion->query($consulta)) {
             $correcto = true;
         } else {
@@ -349,7 +410,7 @@ class gestionDatos
     static function updateDesactivo($email)
     {
         self::conexion();
-        $consulta = "UPDATE " . constantes::$users . " SET active=0  WHERE email ='" . $email. "'";
+        $consulta = "UPDATE " . constantes::$users . " SET active=0  WHERE email ='" . $email . "'";
         if (self::$conexion->query($consulta)) {
             $correcto = true;
         } else {

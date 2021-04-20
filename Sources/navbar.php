@@ -36,7 +36,7 @@ and open the template in the editor.
     include_once '../Modelo/Usuario.php';
     ?>
     <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark mb-3">
-        <a class="navbar-brand" href="../index.php">Citas</a>
+        <a class="navbar-brand mr-5" href="../index.php">Citas</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <?php if (isset($_SESSION['usuarioActual'])) {

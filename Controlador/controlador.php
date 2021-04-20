@@ -38,7 +38,7 @@ if (isset($_REQUEST['iniciarBD'])) {
         $password = $_REQUEST['passwordLogin'];
 
         //CONSULTA A BD.
-        $usuario = gestionDatos::getUser($email, $password);
+        $usuario = gestionDatos::getUserLogin($email, $password);
         if (isset($usuario)) {
             if (gestionDatos::isActive($email)) {
                 gestionDatos::setOnline($email);
@@ -47,16 +47,22 @@ if (isset($_REQUEST['iniciarBD'])) {
                 if (!$firstTime) {
                     header('Location: ../Vistas/preferencias.php');
                 } else {
-                    $user = gestionDatos::getPreferencias($usuario);
-                    $_SESSION['usuarioActual'] = $user;
-                    $_SESSION['Preferencias'] = $user->get_preferencias();
-                    $_SESSION['rolActual'] = $user->get_rol();
-                    if ($user->get_rol() == 2) {
+                    $_SESSION['usuarioActual'] = $usuario;
+                    $_SESSION['Preferencias'] = $usuario->get_preferencias();
+                    $_SESSION['rolActual'] = $usuario->get_rol();
+                    $amigos = array();
+                    $amigos = gestionDatos::getAmigos($usuario->get_idUser());
+                    $pendientes = array();
+                    gestionDatos::getPendientes($usuario->get_idUser());
+
+                    $_SESSION['amigos'] = serialize($amigos);
+                    $_SESSION['pendientes'] = serialize($pendientes);
+                    if ($usuario->get_rol() == 2) {
                         header('Location: ../Vistas/inicio.php');
-                    } else if ($user->get_rol() == 1) {
-                        $usuarios= Array();
-                        $usuarios=gestionDatos::getUsers();
-                        $_SESSION['usuarios'] = serialize( $usuarios);
+                    } else if ($usuario->get_rol() == 1) {
+                        $usuarios = array();
+                        $usuarios = gestionDatos::getUsers();
+                        $_SESSION['usuarios'] = serialize($usuarios);
                         header('Location: ../Vistas/inicioAdmin.php');
                     }
                 }
@@ -131,7 +137,7 @@ if (isset($_REQUEST['registroBD'])) {
     }
 }
 if (isset($_REQUEST['close'])) {
-    $usuario= $_SESSION['usuarioActual'];
+    $usuario = $_SESSION['usuarioActual'];
     unset($_SESSION['usuarioActual']);
     unset($_SESSION['Preferencias']);
     unset($_SESSION['rolActual']);
