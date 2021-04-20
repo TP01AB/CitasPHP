@@ -23,5 +23,6 @@ class constantes
     static public $users = 'users';
     static public $roles = 'asig_rol';
     static public $amistad = 'asig_amistad';
-    static public $preferencias='preferencias';
+    static public $preferencias = 'preferencias';
+    static public $amigos = 'asig_friends';
 }
