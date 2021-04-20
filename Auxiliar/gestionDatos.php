@@ -148,7 +148,7 @@ class gestionDatos
     static function getPreferencias($user)
     {
         self::conexion();
-        $id= $user->get_idUser();
+        $id = $user->get_idUser();
         $stmt = self::$conexion->prepare("SELECT * FROM " . constantes::$preferencias . " WHERE id = ?  ");
         $stmt->bind_param("i", $id);
         if ($stmt->execute()) {
@@ -263,6 +263,20 @@ class gestionDatos
         } else {
             $correcto = false;
             echo "Error al actualizar estado online del usuario: " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+        return $correcto;
+    }
+    //==============================NEW PASSWORD=======================
+    static function setPassword($email, $password)
+    {
+        self::conexion();
+        $consulta = "UPDATE " . constantes::$users . " SET password='" . password_hash($password, PASSWORD_DEFAULT)  . "' WHERE email ='" . $email . "'";
+        if (self::$conexion->query($consulta)) {
+            $correcto = true;
+        } else {
+            $correcto = false;
+            echo "Error al actualizar la contraseña del usuario: " . self::$conexion->error . '<br/>';
         }
         mysqli_close(self::$conexion);
         return $correcto;

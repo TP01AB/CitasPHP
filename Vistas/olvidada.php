@@ -31,47 +31,27 @@ and open the template in the editor.
     </script>
 </head>
 
-<body class="" onload="validacionLogin()">
+<body>
     <?php
     session_start();
     ?>
     <?php include '../Sources/navbar.php'; ?>
     <div class="container min-vh-100 mb-3">
-        <div class="card col-md-5 mx-auto" style="border: 4px solid antiquewhite">
+        <div class="card col-md-5 mx-auto">
             <div class="card-header bg-primary">
-                <h2 class=" font-weight-bold text-white text-center">Inicio sesion</h2>
+                <h2 class=" font-weight-bold text-white text-center">Recordar Contraseña</h2>
             </div>
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="loginForm " action="../Controlador/controlador.php" method="POST" novalidate>
+                <form class=" " name="loginForm " action="../Controlador/Enviar.php" method="POST" novalidate>
 
                     <div class=" mb-4">
-                        <label class="form-label" for="emailLogin">E-mail</label>
-                        <input type="email" id="emailLogin" name="emailLogin" class="form-control" required />
-
+                        <label class="form-label" for="email">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control" required />
                     </div>
-
-                    <!-- Email input -->
-                    <div class=" mb-4">
-                        <label class="form-label" for="passwordLogin">Password </label>
-                        <input type="password" id="passwordLogin" name="passwordLogin" class="form-control" required />
-
-                    </div>
-                    <?php
-                    if (isset($_SESSION['mensaje'])) {
-                        $mensaje = $_SESSION['mensaje'];
-                        unset($_SESSION['mensaje']);
-                    ?>
-
-                        <p class="note note-danger">
-                            <strong>Error:</strong> <?php echo $mensaje; ?>
-                        </p>
-                    <?php
-                    }
-                    ?>
                     <!-- Submit button -->
-                    <button type="submit" name="iniciarBD" id="iniciarBD" class="btn btn-primary btn-block mb-5">Iniciar</button>
+                    <button type="submit" name="iniciarBD" id="iniciarBD" class="btn btn-primary btn-block mb-5">Enviar</button>
                     <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 </form>
             </div>

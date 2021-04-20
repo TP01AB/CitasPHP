@@ -23,15 +23,18 @@ and open the template in the editor.
     session_start();
     ?>
     <div class="card">
-        <div class="card-header">Inicio Citas</div>
+        <div class="card-header bg-primary display-4 text-white text-center">Citas 2.0</div>
         <div class="card-body">
             <form name="login" id="login" class="text-left needs-validation" action="Controlador/controlador.php" method="POST">
 
                 <div class="text-center mb-3 pl-5 pr-5">
-                    <button type="submit" name="vistaLogin" class="btn  text-dark btn-block btn-rounded my-4  z-depth-1a">Login</button>
+                    <button type="submit" name="vistaLogin" class="btn btn-primary text-light btn-block btn-rounded my-4  z-depth-1a">Login</button>
                 </div>
                 <div class="text-center mb-3 pl-5 pr-5">
-                    <button type="submit" name="vistaRegistro" class="btn  text-dark btn-block btn-rounded my-4  z-depth-1a">Registro</button>
+                    <button type="submit" name="vistaRegistro" class="btn btn-primary text-light btn-block btn-rounded my-4  z-depth-1a">Registro</button>
+                </div>
+                <div class="text-center mb-3 pl-5 pr-5">
+                    <button type="submit" name="vistaOlvidada" class="btn btn-primary text-light btn-block btn-rounded my-4  z-depth-1a">Contraseña Olvidada</button>
                 </div>
                 <?php
 
@@ -49,9 +52,9 @@ and open the template in the editor.
             </form>
         </div>
     </div>
-    <?php
-    // put your code here
-    ?>
+    <div class="fixed-bottom">
+        <?php include './Sources/footer.php'; ?>
+    </div>
 
     <!-- SCRIPT -->
 

@@ -16,6 +16,19 @@ and open the template in the editor.
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/all.css">
+    <script src='https://www.google.com/recaptcha/api.js?render=6LetBuUZAAAAAEShdy0B9r0JFMKbsKVrbGW2PbjT'>
+    </script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LetBuUZAAAAAEShdy0B9r0JFMKbsKVrbGW2PbjT', {
+                    action: 'registro'
+                })
+                .then(function(token) {
+                    var recaptchaResponse = document.getElementById('recaptchaResponse');
+                    recaptchaResponse.value = token;
+                });
+        });
+    </script>
 </head>
 <?php
 include_once '../Modelo/Usuario.php';
@@ -71,7 +84,7 @@ session_start();
                         <input type="number" id="edad" name="edad" class="form-control" value="<?= $userDatos->get_age() ?>" required />
                     </div>
                     <?php
-                    
+
                     if (isset($_SESSION['mensaje'])) {
                         $mensaje = $_SESSION['mensaje'];
                         unset($_SESSION['mensaje']);
