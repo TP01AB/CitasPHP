@@ -16,19 +16,7 @@ and open the template in the editor.
     <!-- Your custom styles (optional) -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/all.css">
-    <script src='https://www.google.com/recaptcha/api.js?render=6LetBuUZAAAAAEShdy0B9r0JFMKbsKVrbGW2PbjT'>
-    </script>
-    <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LetBuUZAAAAAEShdy0B9r0JFMKbsKVrbGW2PbjT', {
-                    action: 'registro'
-                })
-                .then(function(token) {
-                    var recaptchaResponse = document.getElementById('recaptchaResponse');
-                    recaptchaResponse.value = token;
-                });
-        });
-    </script>
+ 
 </head>
 <?php
 include_once '../Modelo/Usuario.php';
@@ -98,7 +86,6 @@ session_start();
                     ?>
                     <!-- Submit button -->
                     <button type="submit" name="registroBD" id="registroBD" class="btn btn-primary btn-block mb-5">Registrarse</button>
-                    <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 </form>
             </div>
         </div>

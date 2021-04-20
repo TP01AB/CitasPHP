@@ -51,12 +51,13 @@ if (isset($_REQUEST['iniciarBD'])) {
                     $_SESSION['usuarioActual'] = $user;
                     $_SESSION['Preferencias'] = $user->get_preferencias();
                     $_SESSION['rolActual'] = $user->get_rol();
+                    $usuarios = array();
+                    $usuarios = gestionDatos::getUsers();
+                    $_SESSION['usuarios'] = serialize($usuarios);
                     if ($user->get_rol() == 2) {
                         header('Location: ../Vistas/inicio.php');
                     } else if ($user->get_rol() == 1) {
-                        $usuarios= Array();
-                        $usuarios=gestionDatos::getUsers();
-                        $_SESSION['usuarios'] = serialize( $usuarios);
+                        
                         header('Location: ../Vistas/inicioAdmin.php');
                     }
                 }
