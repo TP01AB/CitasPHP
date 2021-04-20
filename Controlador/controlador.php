@@ -33,20 +33,18 @@ if (isset($_REQUEST['iniciarBD'])) {
             gestionDatos::setOnline($email);
             $usuario->set_isOnline(true);
             $firstTime = gestionDatos::isFirstTime($usuario->get_idUser());
-            if ($firstTime) {
+            if (!$firstTime) {
                 header('Location: ../Vistas/preferencias.php');
             } else {
                 $usuario = gestionDatos::getPreferencias($usuario);
                 $_SESSION['usuarioActual'] = $usuario;
+                $_SESSION['Preferencias'] = $usuario->get_preferencias();
                 if ($usuario->get_rol() == 2) {
-
                     header('Location: ../Vistas/inicio.php');
                 } else if ($usuario->get_rol() == 1) {
-
                     header('Location: ../Vistas/seleccionAdmin.php');
                 }
             }
-            
             /*$allOnline = gestionDatos::getAllOnline();
         $friendOnline = gestionDatos::getFriendsOnline($usuario->get_idUser());
        */

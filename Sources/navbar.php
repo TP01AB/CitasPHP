@@ -31,9 +31,10 @@ and open the template in the editor.
 </head>
 
 <body>
-    <?php
-    session_start();
-    ?>
+   <?php
+    include_once '../Modelo/Usuario.php';
+    include_once '../Auxiliar/gestionDatos.php';
+   ?>
     <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark mb-3">
         <a class="navbar-brand" href="../index.php">Citas</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
