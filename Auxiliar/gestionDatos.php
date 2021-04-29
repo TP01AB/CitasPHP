@@ -132,13 +132,14 @@ class gestionDatos
                     $idUser = $row['id_user'];
                     $email = $row['email'];
                     $nick = $row['nick'];
+                    $sex = $row['sexo'];
                     $age = $row['age'];
                     $dni = $row['dni'];
                     $phone = $row['phone'];
                     $isActive = $row['active'];
                     $isOnline = $row['online'];
                     $rol = $row['id_rol'];
-                    $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
+                    $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
                 }
             }
             if (!gestionDatos::isFirstTime($idUser)) {
@@ -160,13 +161,14 @@ class gestionDatos
                 $idUser = $row['id_user'];
                 $email = $row['email'];
                 $nick = $row['nick'];
+                $sex= $row['sexo'];
                 $age = $row['age'];
                 $dni = $row['dni'];
                 $phone = $row['phone'];
                 $isActive = $row['active'];
                 $isOnline = $row['online'];
                 $rol = $row['id_rol'];
-                $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
+                $user = new Usuario($idUser, $email, $dni, $rol, $nick,$sex, $age, $phone, $isActive, $isOnline);
             }
             if (!gestionDatos::isFirstTime($idUser)) {
                 $user = gestionDatos::getPreferencias($user);
@@ -187,13 +189,14 @@ class gestionDatos
                 $idUser = $row['id_user'];
                 $email = $row['email'];
                 $nick = $row['nick'];
+                $sex = $row['sexo'];
                 $age = $row['age'];
                 $dni = $row['dni'];
                 $phone = $row['phone'];
                 $isActive = $row['active'];
                 $isOnline = $row['online'];
                 $rol = $row['id_rol'];
-                $user = new Usuario($idUser, $email, $dni, $rol, $nick, $age, $phone, $isActive, $isOnline);
+                $user = new Usuario($idUser, $email, $dni, $rol, $nick,$sex, $age, $phone, $isActive, $isOnline);
                 $users[] = $user;
             }
         }
@@ -476,7 +479,7 @@ class gestionDatos
     static function insertUser($user, $password)
     {
         self::conexion();
-        $consulta = "INSERT INTO " . constantes::$users . " VALUES (default ,'" . $user->get_dni() . "','" . $user->get_email() . "','" . password_hash($password, PASSWORD_DEFAULT) . "','" . $user->get_nick() . "','" . $user->get_age() . "','" . $user->get_phone() . "',default,default)";
+        $consulta = "INSERT INTO " . constantes::$users . " VALUES (default ,'" . $user->get_dni() . "','" . $user->get_email() . "','" . password_hash($password, PASSWORD_DEFAULT) . "','" . $user->get_nick() . "','" . $user->get_sex()."','" . $user->get_age() . "','" . $user->get_phone() . "',default,default)";
         if (self::$conexion->query($consulta)) {
 
             $correcto = true;

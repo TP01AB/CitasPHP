@@ -44,19 +44,19 @@ and open the template in the editor.
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="loginForm " action="../Controlador/controlador.php" method="POST" novalidate>
+                <form class=" " id="loginForm" name="loginForm " action="../Controlador/controlador.php" method="POST" novalidate>
 
-                    <div class=" mb-4">
+                    <div class=" mb-5">
                         <label class="form-label" for="emailLogin">E-mail</label>
                         <input type="email" id="emailLogin" name="emailLogin" class="form-control" required />
-
+                        <div id="emailError"></div>
                     </div>
 
                     <!-- Email input -->
-                    <div class=" mb-4">
+                    <div class=" mb-4 mt-2">
                         <label class="form-label" for="passwordLogin">Password </label>
-                        <input type="password" id="passwordLogin" name="passwordLogin" class="form-control" required />
-
+                        <input type="password" id="passwordLogin" name="passwordLogin" class="form-control" minlength="8" required />
+                        <div id="passwordError"></div>
                     </div>
                     <?php
                     if (isset($_SESSION['mensaje'])) {
@@ -71,7 +71,7 @@ and open the template in the editor.
                     }
                     ?>
                     <!-- Submit button -->
-                    <button type="submit" name="iniciarBD" id="iniciarBD" class="btn btn-primary btn-block mb-5">Iniciar</button>
+                    <button type="submit" name="iniciarBD" id="iniciarBD" class="btn btn-primary btn-block mb-5 mt-2">Iniciar</button>
                     <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 </form>
             </div>
@@ -91,7 +91,7 @@ and open the template in the editor.
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <!-- Your custom scripts (optional) -->
-    <script type="text/javascript" src="../js/Validacion.js"></script>
+    <script type="text/javascript" src="../js/validar.js"></script>
 </body>
 
 </html>

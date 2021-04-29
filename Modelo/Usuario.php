@@ -25,10 +25,11 @@ class Usuario
     private $phone;
     private $isActive;
     private $isOnline;
+    private $puntuacion;
     private $preferencias;
 
     //-----------------------CONSTRUCTOR
-    function __construct($idUser, $email, $dni, $rol, $nick, $sexo, $age, $phone, $isActive, $isOnline)
+    function __construct($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline)
     {
         $this->idUser = $idUser;
         $this->email = $email;
@@ -40,6 +41,7 @@ class Usuario
         $this->rol = $rol;
         $this->isActive = $isActive;
         $this->isOnline = $isOnline;
+        $this->puntuacion = 300;
     }
 
     //-----------------------GET
@@ -52,7 +54,10 @@ class Usuario
     {
         return $this->email;
     }
-
+    public function get_puntuacion()
+    {
+        return $this->puntuacion;
+    }
     public function get_dni()
     {
         return $this->dni;
@@ -110,7 +115,10 @@ class Usuario
     {
         $this->dni = $dni;
     }
-
+    public function set_puntuacion($puntuacion): void
+    {
+        $this->puntuacion = $puntuacion;
+    }
     public function set_rol($rol): void
     {
         $this->rol = $rol;

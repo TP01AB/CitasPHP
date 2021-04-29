@@ -35,7 +35,7 @@ include_once '../Modelo/Usuario.php';
 session_start();
 ?>
 
-<body class="" onload="validacionLogin()">
+<body class="" onload="validarRegistro()">
 
     <?php include '../Sources/navbar.php'; ?>
     <div class="container min-vh-100 mb-3">
@@ -48,40 +48,52 @@ session_start();
                 $userDatos = $_SESSION['userDatos'];
                 unset($_SESSION['userDatos']);
             } else {
-                $userDatos = new Usuario(0, "", "", 0, "", 0, 0, 0, 0);
+                $userDatos = new Usuario(0, "", "", 0, "", 0, 0, 0, 0, 0);
             }
             ?>
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="registroForm " action="../Controlador/controlador.php" method="POST" novalidate>
+                <form class=" " id="registroForm" name="registroForm " action="../Controlador/controlador.php" method="POST" novalidate>
 
-                    <div class=" mb-4">
+                    <div class=" mb-5">
                         <label class="form-label" for="email">E-mail</label>
-                        <input type="email" id="email" name="email" class="form-control" required value="<?= $userDatos->get_email() ?>" />
+                        <input type="email" id="email" name="email" class="form-control" value="<?= $userDatos->get_email() ?>" required />
+                        <div id="emailError" class="p-2"></div>
                     </div>
 
                     <!-- Email input -->
                     <div class=" mb-4">
                         <label class="form-label" for="password">Password </label>
-                        <input type="password" id="password" name="password" class="form-control" required />
+                        <input type="password" id="password" name="password" class="form-control" minlength="8" required />
+                        <div id="passwordError" class="p-2"></div>
                     </div>
 
                     <div class=" mb-4">
                         <label class="form-label" for="nombre">Nombre </label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" value="<?= $userDatos->get_nick() ?>" required />
+                        <input type="text" id="nombre" name="nombre" class="form-control" minlength="3" value="<?= $userDatos->get_nick() ?>" required />
+                        <div id="nombreError"></div>
                     </div>
                     <div class=" mb-4">
                         <label class="form-label" for="dni">DNI </label>
-                        <input type="text" id="dni" name="dni" class="form-control" value="<?= $userDatos->get_dni() ?>" required />
+                        <input type="text" id="dni" name="dni" class="form-control" minlength="9" pattern="^[0-9]{8}[A-Z]{1}$" value="<?= $userDatos->get_dni() ?>" required />
+                        <div id="dniError"></div>
                     </div>
                     <div class=" mb-4">
                         <label class="form-label" for="telefono">Telefono </label>
-                        <input type="number" id="telefono" name="telefono" class="form-control" value="<?= $userDatos->get_phone() ?>" required />
+                        <input type="number" id="telefono" name="telefono" class="form-control" value="<?= $userDatos->get_phone() ?>" pattern="^[0-9]{9}$" required />
+                        <div id="telefonoError"></div>
                     </div>
                     <div class=" mb-4">
                         <label class="form-label" for="edad">Edad </label>
-                        <input type="number" id="edad" name="edad" class="form-control" value="<?= $userDatos->get_age() ?>" required />
+                        <input type="number" id="edad" name="edad" class="form-control" value="<?= $userDatos->get_age() ?>" min="18" required />
+                        <div id="edadError"></div>
+                    </div>
+                    <div class=" mb-4">
+                        <label class="form-label" for="sexo1">Masculino </label>
+                        <input type="radio" id="sexo1" name="sexo" class="" value="1" required /><BR>
+                        <label class="form-label" for="sexo0">Femenino </label>
+                        <input type="radio" id="sexo0" name="sexo" class="" value="0" required />
                     </div>
                     <?php
 
@@ -117,7 +129,7 @@ session_start();
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <!-- Your custom scripts (optional) -->
-    <script type="text/javascript" src="../js/Validacion.js"></script>
+    <script type="text/javascript" src="../js/validar.js"></script>
 </body>
 
 </html>

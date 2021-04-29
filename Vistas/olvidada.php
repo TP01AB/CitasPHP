@@ -31,7 +31,7 @@ and open the template in the editor.
     </script>
 </head>
 
-<body>
+<body onload="validarCambio()">
     <?php
     session_start();
     ?>
@@ -44,14 +44,15 @@ and open the template in the editor.
             <!--Card content-->
             <div class="card-body">
                 <!-- Form -->
-                <form class=" " name="loginForm " action="../Controlador/Enviar.php" method="POST" novalidate>
+                <form class=" " id="olvidada" name="olvidada " action="../Controlador/Enviar.php" method="POST" novalidate>
 
                     <div class=" mb-4">
                         <label class="form-label" for="email">E-mail</label>
                         <input type="email" id="email" name="email" class="form-control" required />
+                        <div id="emailError" class="p-2"></div>
                     </div>
                     <!-- Submit button -->
-                    <button type="submit" name="iniciarBD" id="iniciarBD" class="btn btn-primary btn-block mb-5">Enviar</button>
+                    <button type="submit" name="iniciarBD" id="iniciarBD" class="mt-5 btn btn-primary btn-block mb-3">Enviar</button>
                     <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
                 </form>
             </div>
@@ -71,7 +72,7 @@ and open the template in the editor.
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <!-- Your custom scripts (optional) -->
-    <script type="text/javascript" src="../js/Validacion.js"></script>
+    <script type="text/javascript" src="../js/validar.js"></script>
 </body>
 
 </html>
