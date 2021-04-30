@@ -41,7 +41,8 @@ class Usuario
         $this->rol = $rol;
         $this->isActive = $isActive;
         $this->isOnline = $isOnline;
-        $this->puntuacion = 300;
+        $this->puntuacion = 0;
+        $this->preferencias=[];
     }
 
     //-----------------------GET
@@ -115,10 +116,6 @@ class Usuario
     {
         $this->dni = $dni;
     }
-    public function set_puntuacion($puntuacion): void
-    {
-        $this->puntuacion = $puntuacion;
-    }
     public function set_rol($rol): void
     {
         $this->rol = $rol;
@@ -155,5 +152,46 @@ class Usuario
     public function set_preferencias($preferencias): void
     {
         $this->preferencias = $preferencias;
+    }
+    public function set_puntuacion($D, $A, $P, $TR, $HJ, $B)
+    {
+        $preferencias = $this->get_preferencias();
+        $puntuacion = 300;
+        if ($D < $preferencias->get_deporte()) {
+            $puntuacion = $puntuacion - ($preferencias->get_deporte() - $D);
+        } else {
+            $puntuacion = $puntuacion - ($D - $preferencias->get_deporte());
+        }
+
+        if ($A < $preferencias->get_arte()) {
+            $puntuacion = $puntuacion - ($preferencias->get_arte() - $A);
+        } else {
+            $puntuacion = $puntuacion - ($A - $preferencias->get_arte());
+        }
+
+        if ($P < $preferencias->get_politica()) {
+            $puntuacion = $puntuacion - ($preferencias->get_politica() - $P);
+        } else {
+            $puntuacion = $puntuacion - ($P - $preferencias->get_politica());
+        }
+
+        if ($TR == $preferencias->get_tipoRelacion()) {
+            $puntuacion = $puntuacion * 1.2;
+        } else {
+            $puntuacion = $puntuacion * 0.75;
+        }
+
+        if ($HJ == $preferencias->get_hijos()) {
+            $puntuacion = $puntuacion * 1.1;
+        } else {
+            $puntuacion = $puntuacion * 0.6;
+        }
+
+        if ($B == $preferencias->get_busca()) {
+            $puntuacion = $puntuacion * 0.3;
+        } else {
+            $puntuacion = $puntuacion * 1;
+        }
+        $this->puntuacion = $puntuacion;
     }
 }

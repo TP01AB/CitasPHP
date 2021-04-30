@@ -54,28 +54,39 @@ if (isset($_REQUEST['iniciarBD'])) {
 
                     $amigos = array();
                     $amigos = gestionDatos::getAmigos($usuario->get_idUser());
-                    $pendientes = array();
-                    gestionDatos::getPendientes($usuario->get_idUser());
+                    $usuarios = array();
+                    $usuarios = gestionDatos::getUsers($usuario->get_idUser(), $amigos);
 
+                    //ALGORITMO
+                    $preferencias = $usuario->get_preferencias();
+
+                    foreach ($usuarios as $i =>  $us) {
+                        if ($us->get_preferencias() != null) {
+                            $us->set_puntuacion($preferencias->get_deporte(), $preferencias->get_arte(), $preferencias->get_politica(), $preferencias->get_tipoRelacion(), $preferencias->get_hijos(), $preferencias->get_busca());
+                        }
+                      
+                        $usuarios[$i] = $us;
+                    }
+                    foreach ($amigos as $i =>  $us) {
+                        if ($us->get_preferencias() != null) {
+                            $us->set_puntuacion($preferencias->get_deporte(), $preferencias->get_arte(), $preferencias->get_politica(), $preferencias->get_tipoRelacion(), $preferencias->get_hijos(), $preferencias->get_busca());
+                        }
+
+                        $amigos[$i] = $us;
+                    }
+
+                    ///FIN DE ALGORITMO
+                    $_SESSION['todos'] = serialize($usuarios);
                     $_SESSION['amigos'] = serialize($amigos);
-                    $_SESSION['pendientes'] = serialize($pendientes);
                     if ($usuario->get_rol() == 2) {
-                        $usuarios = array();
-                        $usuarios = gestionDatos::getUsers($usuario->get_idUser());
-                        $_SESSION['todos'] = serialize($usuarios);
                         header('Location: ../Vistas/inicio.php');
                     } else if ($usuario->get_rol() == 1) {
-                        $usuarios = array();
-                        $usuarios = gestionDatos::getUsers($usuario->get_idUser());
-                        $_SESSION['todos'] = serialize($usuarios);
-                        $usuarios=gestionDatos::getUsersCrud();
+                        $usuarios = gestionDatos::getUsersCrud();
                         $_SESSION['usuarios'] = serialize($usuarios);
                         header('Location: ../Vistas/inicioAdmin.php');
                     }
                 }
-                /*
-        $friendOnline = gestionDatos::getFriendsOnline($usuario->get_idUser());
-       */
+              
             } else {
                 $mensaje = "Usuario desactivado";
                 $_SESSION['mensaje'] = $mensaje;
@@ -108,7 +119,7 @@ if (isset($_REQUEST['registroBD'])) {
         $sexo = $_REQUEST['sexo'];
         $telefono = $_REQUEST['telefono'];
         //GUARDAMOS DATOS
-        $user = new Usuario(0, $email, $dni, 0, $nombre,$sexo, $edad, $telefono, 0, 0);
+        $user = new Usuario(0, $email, $dni, 0, $nombre, $sexo, $edad, $telefono, 0, 0);
         //COMPROBACIONES PREVIAS 
 
         if (gestionDatos::isExistDni($dni)) {

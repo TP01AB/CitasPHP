@@ -24,7 +24,7 @@ class gestionDatos
         //self::$conexion = mysqli_connect('localhost', 'maria', 'Chubaca2020', 'desafio2');
         self::$conexion = mysqli_connect('localhost', constantes::$usuarioBD, constantes::$passBD, constantes::$bd);
         //self::$conexion = mysqli_connect('localhost', 'Maria', 'Chubaca2020', 'desafio2');
-        print "Conexión realizada de forma procedimental: " . mysqli_get_server_info(self::$conexion) . "<br/>";
+        //print "Conexión realizada de forma procedimental: " . mysqli_get_server_info(self::$conexion) . "<br/>";
         if (mysqli_connect_errno(self::$conexion)) {
             print "Fallo al conectar a MySQL: " . mysqli_connect_error();
             die();
@@ -112,7 +112,41 @@ class gestionDatos
             return $existe;
         }
     }
+    //===========================ES AMIGO =============================
+    static function isFriend($idE, $idR)
+    {
+        self::conexion();
+        $consulta = "SELECT * FROM " . constantes::$amigos . " WHERE  respuestaE= 1 AND id_userE = " . $idE . " AND id_userR=" . $idR;
+        if ($resultado = self::$conexion->query($consulta)) {
+            if ($row = $resultado->fetch_assoc()) {
+                $existe = true;
+            } else {
+                echo "No se encuentran preferencias del  usuario:  '<br/>'";
+                $existe = false;
+            }
 
+            mysqli_close(self::$conexion);
+            return $existe;
+        }
+    }
+    //===========================NO ES AMIGO =============================
+    static function isNoGusta($idE, $idR)
+    {
+        self::conexion();
+        $consulta = "SELECT * FROM " . constantes::$amigos . " WHERE  respuestaE= 2 AND (id_userR=" . $idR . " AND id_userE = " . $idE . ") OR (id_userR=" . $idE." AND id_userE = " . $idR .")";
+        if ($resultado = self::$conexion->query($consulta)) {
+            if ($row = $resultado->fetch_assoc()) {
+                $existe = true;
+            } else {
+                echo "No se encuentran preferencias del  usuario:  '<br/>'";
+                $existe = false;
+            }
+
+            mysqli_close(self::$conexion);
+            return $existe;
+        }
+    }
+    
     //======================================================================
     // GET
     //======================================================================
@@ -142,7 +176,7 @@ class gestionDatos
                     $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
                 }
             }
-            if (!gestionDatos::isFirstTime($idUser)) {
+            if (gestionDatos::isFirstTime($idUser)) {
                 $user = gestionDatos::getPreferencias($user);
             }
             return $user;
@@ -170,16 +204,16 @@ class gestionDatos
                 $rol = $row['id_rol'];
                 $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
             }
-            if (!gestionDatos::isFirstTime($idUser)) {
+            if (gestionDatos::isFirstTime($idUser)) {
                 $user = gestionDatos::getPreferencias($user);
             }
-            mysqli_close(self::$conexion);
+
             return $user;
         }
     }
 
     //===========================ALL USER===================================
-    static function getUsers($idActual)
+    static function getUsers($idActual, $amigos)
     {
         self::conexion();
         $users = array();
@@ -188,21 +222,27 @@ class gestionDatos
             while ($row = $resultado->fetch_assoc()) {
                 $idUser = $row['id_user'];
                 if ($idActual != $idUser) {
-                    $email = $row['email'];
-                    $nick = $row['nick'];
-                    $sex = $row['sexo'];
-                    $age = $row['age'];
-                    $dni = $row['dni'];
-                    $phone = $row['phone'];
-                    $isActive = $row['active'];
-                    $isOnline = $row['online'];
-                    $rol = $row['id_rol'];
-                    $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
-                    $users[] = $user;
+                    if (!gestionDatos::isFriend($idActual, $idUser)) {
+                        if (!gestionDatos::isNoGusta($idActual, $idUser)) {
+                            $email = $row['email'];
+                            $nick = $row['nick'];
+                            $sex = $row['sexo'];
+                            $age = $row['age'];
+                            $dni = $row['dni'];
+                            $phone = $row['phone'];
+                            $isActive = $row['active'];
+                            $isOnline = $row['online'];
+                            $rol = $row['id_rol'];
+                            $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
+                            if (gestionDatos::isFirstTime($idUser)) {
+                                $user = gestionDatos::getPreferencias($user);
+                            }
+                            $users[] = $user;
+                        }
+                    }
                 }
             }
         }
-        mysqli_close(self::$conexion);
         return $users;
     }
     static function getUsersCrud()
@@ -235,31 +275,16 @@ class gestionDatos
     {
         self::conexion();
         $users = array();
-        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$amigos . " WHERE " . constantes::$users . ".id_user=" . $idUser . " AND " . constantes::$amigos . ".respuestaR =1 AND (" . constantes::$amigos . ".idUserE =" . $idUser . " OR " . constantes::$amigos . ".idUserR =" . $idUser . " ) ";
+        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$amigos . " WHERE " . constantes::$amigos . ".id_userE=" . $idUser . " AND " . constantes::$amigos . ".respuestaE =1 AND " . constantes::$amigos . ".id_userR=" . constantes::$users . ".id_user";
         if ($resultado = self::$conexion->query($consulta)) {
             while ($row = $resultado->fetch_assoc()) {
-                $idUser = $row['id_user'];
-                $user = gestionDatos::getUser($idUser);
-                $users[] = $user;
+                $idU = $row['id_user'];
+                if (gestionDatos::isFriend($idU, $idUser)) {
+                    $user = gestionDatos::getUser($idU);
+                    $users[] = $user;
+                }
             }
         }
-        mysqli_close(self::$conexion);
-        return $users;
-    }
-    //===========================GET FRIENDS ===================================
-    static function getPendientes($idUser)
-    {
-        self::conexion();
-        $users = array();
-        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$amigos . " WHERE " . constantes::$users . ".id_user=" . $idUser . " AND " . constantes::$amigos . ".respuestaR =0 AND (" . constantes::$amigos . ".idUserE =" . $idUser . " OR " . constantes::$amigos . ".idUserR =" . $idUser . " ) ";
-        if ($resultado = self::$conexion->query($consulta)) {
-            while ($row = $resultado->fetch_assoc()) {
-                $idUser = $row['id_user'];
-                $user = gestionDatos::getUser($idUser);
-                $users[] = $user;
-            }
-        }
-        mysqli_close(self::$conexion);
         return $users;
     }
     //===========================USER PREFERENCES===================================
@@ -547,6 +572,20 @@ class gestionDatos
         if (self::$conexion->query($consulta)) {
         } else {
             echo "Error al insertar preferencias del   usuario : " . self::$conexion->error . '<br/>';
+        }
+        mysqli_close(self::$conexion);
+    }
+    //==============================INSERT AMISTAD=======================
+    static function insertAmigo($idE, $idR, $tipo)
+    {
+        self::conexion();
+        $consulta = "INSERT INTO " . constantes::$amigos . " VALUES (" . $idE . " ," . $idR . "," . $tipo . ")";
+        if (self::$conexion->query($consulta)) {
+            return true;
+        } else {
+
+            echo "Error al insertar amistad del   usuario : " . self::$conexion->error . '<br/>';
+            return false;
         }
         mysqli_close(self::$conexion);
     }
