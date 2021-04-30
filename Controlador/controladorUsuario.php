@@ -100,6 +100,29 @@ if (isset($_REQUEST['preferenciasBD'])) {
         gestionDatos::insertPreferencias($preferencias, $usuario->get_idUser());
     }
     $usuario->set_preferencias($preferencias);
+    $amigos = gestionDatos::getAmigos($usuario->get_idUser());
+    $usuarios = gestionDatos::getUsers($usuario->get_idUser(), $amigos);
+    //ALGORITMO
+    $preferencias = $usuario->get_preferencias();
+
+    foreach ($usuarios as $i =>  $us) {
+        if ($us->get_preferencias() != null) {
+            $us->set_puntuacion($preferencias->get_deporte(), $preferencias->get_arte(), $preferencias->get_politica(), $preferencias->get_tipoRelacion(), $preferencias->get_hijos(), $preferencias->get_busca());
+        }
+
+        $usuarios[$i] = $us;
+    }
+    foreach ($amigos as $i =>  $us) {
+        if ($us->get_preferencias() != null) {
+            $us->set_puntuacion($preferencias->get_deporte(), $preferencias->get_arte(), $preferencias->get_politica(), $preferencias->get_tipoRelacion(), $preferencias->get_hijos(), $preferencias->get_busca());
+        }
+
+        $amigos[$i] = $us;
+    }
+
+    ///FIN DE ALGORITMO
+    $_SESSION['amigos'] = serialize($amigos);
+    $_SESSION['todos'] = serialize($usuarios);
     $_SESSION['usuarioActual'] = $usuario;
     $_SESSION['Preferencias'] = $preferencias;
     $mensaje = "Preferencias modificadas";
