@@ -13,6 +13,9 @@ $_SESSION['allOnline'] = gestionDatos::getAllOnline();
 if (isset($_SESSION['usuarioActual'])) {
     $usuario = $_SESSION['usuarioActual'];
 }
+if (isset($_SESSION['hacerAmigo'])) {
+    $usuario = $_SESSION['usuarioActual'];
+}
 if (isset($_REQUEST['preferenciasBD'])) {
     $deportes = $_REQUEST['deportes'];
     $artes = $_REQUEST['artes'];

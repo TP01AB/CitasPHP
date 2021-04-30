@@ -60,10 +60,15 @@ if (isset($_REQUEST['iniciarBD'])) {
                     $_SESSION['amigos'] = serialize($amigos);
                     $_SESSION['pendientes'] = serialize($pendientes);
                     if ($usuario->get_rol() == 2) {
+                        $usuarios = array();
+                        $usuarios = gestionDatos::getUsers($usuario->get_idUser());
+                        $_SESSION['todos'] = serialize($usuarios);
                         header('Location: ../Vistas/inicio.php');
                     } else if ($usuario->get_rol() == 1) {
                         $usuarios = array();
-                        $usuarios = gestionDatos::getUsers();
+                        $usuarios = gestionDatos::getUsers($usuario->get_idUser());
+                        $_SESSION['todos'] = serialize($usuarios);
+                        $usuarios=gestionDatos::getUsersCrud();
                         $_SESSION['usuarios'] = serialize($usuarios);
                         header('Location: ../Vistas/inicioAdmin.php');
                     }

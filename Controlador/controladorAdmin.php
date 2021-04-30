@@ -22,10 +22,11 @@ if (isset($_REQUEST['registroBD'])) {
     $password = $_REQUEST['password'];
     $nombre = $_REQUEST['nombre'];
     $edad = $_REQUEST['edad'];
+    $sexo= $_REQUEST['sexo'];
     $dni = $_REQUEST['dni'];
     $telefono = $_REQUEST['telefono'];
     //GUARDAMOS DATOS
-    $user = new Usuario(0, $email, $dni, 0, $nombre, $edad, $telefono, 0, 0);
+    $user = new Usuario(0, $email, $dni, 0, $nombre ,$sexo, $edad, $telefono, 0, 0);
     //COMPROBACIONES PREVIAS 
 
     if (gestionDatos::isExistDni($dni)) {

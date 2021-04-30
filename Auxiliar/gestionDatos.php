@@ -161,14 +161,14 @@ class gestionDatos
                 $idUser = $row['id_user'];
                 $email = $row['email'];
                 $nick = $row['nick'];
-                $sex= $row['sexo'];
+                $sex = $row['sexo'];
                 $age = $row['age'];
                 $dni = $row['dni'];
                 $phone = $row['phone'];
                 $isActive = $row['active'];
                 $isOnline = $row['online'];
                 $rol = $row['id_rol'];
-                $user = new Usuario($idUser, $email, $dni, $rol, $nick,$sex, $age, $phone, $isActive, $isOnline);
+                $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
             }
             if (!gestionDatos::isFirstTime($idUser)) {
                 $user = gestionDatos::getPreferencias($user);
@@ -179,7 +179,7 @@ class gestionDatos
     }
 
     //===========================ALL USER===================================
-    static function getUsers()
+    static function getUsers($idActual)
     {
         self::conexion();
         $users = array();
@@ -187,6 +187,33 @@ class gestionDatos
         if ($resultado = self::$conexion->query($consulta)) {
             while ($row = $resultado->fetch_assoc()) {
                 $idUser = $row['id_user'];
+                if ($idActual != $idUser) {
+                    $email = $row['email'];
+                    $nick = $row['nick'];
+                    $sex = $row['sexo'];
+                    $age = $row['age'];
+                    $dni = $row['dni'];
+                    $phone = $row['phone'];
+                    $isActive = $row['active'];
+                    $isOnline = $row['online'];
+                    $rol = $row['id_rol'];
+                    $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
+                    $users[] = $user;
+                }
+            }
+        }
+        mysqli_close(self::$conexion);
+        return $users;
+    }
+    static function getUsersCrud()
+    {
+        self::conexion();
+        $users = array();
+        $consulta = "SELECT * FROM " . constantes::$users . "," . constantes::$roles . " WHERE " . constantes::$roles . ".id_user = " . constantes::$users . ".id_user ";
+        if ($resultado = self::$conexion->query($consulta)) {
+            while ($row = $resultado->fetch_assoc()) {
+                $idUser = $row['id_user'];
+
                 $email = $row['email'];
                 $nick = $row['nick'];
                 $sex = $row['sexo'];
@@ -196,7 +223,7 @@ class gestionDatos
                 $isActive = $row['active'];
                 $isOnline = $row['online'];
                 $rol = $row['id_rol'];
-                $user = new Usuario($idUser, $email, $dni, $rol, $nick,$sex, $age, $phone, $isActive, $isOnline);
+                $user = new Usuario($idUser, $email, $dni, $rol, $nick, $sex, $age, $phone, $isActive, $isOnline);
                 $users[] = $user;
             }
         }
@@ -479,7 +506,7 @@ class gestionDatos
     static function insertUser($user, $password)
     {
         self::conexion();
-        $consulta = "INSERT INTO " . constantes::$users . " VALUES (default ,'" . $user->get_dni() . "','" . $user->get_email() . "','" . password_hash($password, PASSWORD_DEFAULT) . "','" . $user->get_nick() . "','" . $user->get_sex()."','" . $user->get_age() . "','" . $user->get_phone() . "',default,default)";
+        $consulta = "INSERT INTO " . constantes::$users . " VALUES (default ,'" . $user->get_dni() . "','" . $user->get_email() . "','" . password_hash($password, PASSWORD_DEFAULT) . "','" . $user->get_nick() . "','" . $user->get_sex() . "','" . $user->get_age() . "','" . $user->get_phone() . "',default,default)";
         if (self::$conexion->query($consulta)) {
 
             $correcto = true;
