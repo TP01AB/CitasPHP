@@ -64,14 +64,11 @@ if (isset($_REQUEST['iniciarBD'])) {
                         if ($us->get_preferencias() != null) {
                             $us->set_puntuacion($preferencias->get_deporte(), $preferencias->get_arte(), $preferencias->get_politica(), $preferencias->get_tipoRelacion(), $preferencias->get_hijos(), $preferencias->get_busca());
                         }
-                      
-                        $usuarios[$i] = $us;
                     }
                     foreach ($amigos as $i =>  $us) {
                         if ($us->get_preferencias() != null) {
                             $us->set_puntuacion($preferencias->get_deporte(), $preferencias->get_arte(), $preferencias->get_politica(), $preferencias->get_tipoRelacion(), $preferencias->get_hijos(), $preferencias->get_busca());
                         }
-
                         $amigos[$i] = $us;
                     }
 
@@ -86,7 +83,6 @@ if (isset($_REQUEST['iniciarBD'])) {
                         header('Location: ../Vistas/inicioAdmin.php');
                     }
                 }
-              
             } else {
                 $mensaje = "Usuario desactivado";
                 $_SESSION['mensaje'] = $mensaje;
